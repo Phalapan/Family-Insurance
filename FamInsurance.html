@@ -9,249 +9,197 @@
 <title>Family Insurance</title>
 <style>
 :root {
-  --primary:#1a73e8; --primary-dark:#1557b0; --primary-light:#e8f0fe;
-  --success:#34a853; --success-light:#e6f4ea;
-  --warning:#fbbc04; --warning-light:#fef9e7;
-  --danger:#ea4335; --danger-light:#fce8e6;
-  --purple:#9c27b0; --purple-light:#f3e5f5;
-  --orange:#ff6d00; --orange-light:#fff3e0;
-  --g50:#f8f9fa; --g100:#f1f3f4; --g200:#e8eaed; --g300:#dadce0;
-  --g400:#bdc1c6; --g500:#9aa0a6; --g600:#80868b; --g700:#5f6368;
-  --g800:#3c4043; --g900:#202124; --white:#fff;
-  --sh-sm:0 1px 3px rgba(0,0,0,.08); --sh:0 4px 12px rgba(0,0,0,.08);
+  --primary:#1a73e8;--primary-dark:#1557b0;--primary-light:#e8f0fe;
+  --success:#34a853;--success-light:#e6f4ea;
+  --warning:#fbbc04;--warning-light:#fef9e7;
+  --danger:#ea4335;--danger-light:#fce8e6;
+  --purple:#9c27b0;--purple-light:#f3e5f5;
+  --orange:#ff6d00;--orange-light:#fff3e0;
+  --g50:#f8f9fa;--g100:#f1f3f4;--g200:#e8eaed;--g300:#dadce0;
+  --g400:#bdc1c6;--g500:#9aa0a6;--g600:#80868b;--g700:#5f6368;
+  --g800:#3c4043;--g900:#202124;--white:#fff;
+  --sh-sm:0 1px 3px rgba(0,0,0,.08);--sh:0 4px 12px rgba(0,0,0,.08);
   --sh-lg:0 8px 24px rgba(0,0,0,.1);
-  --r:12px; --r-sm:8px; --r-lg:16px;
+  --r:12px;--r-sm:8px;--r-lg:16px;
   --ease:all .2s cubic-bezier(.4,0,.2,1);
-  --safe-top: env(safe-area-inset-top);
-  --safe-bottom: env(safe-area-inset-bottom);
-  --safe-left: env(safe-area-inset-left);
-  --safe-right: env(safe-area-inset-right);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans Thai',sans-serif;
-  background:var(--g50);color:var(--g900);min-height:100vh;font-size:14px;
-  line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
+html,body{height:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans Thai',sans-serif;
+  background:var(--g50);color:var(--g900);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
 
-/* ── BOTTOM NAV (Mobile) ── */
+/* ── LOADING SCREEN ── */
+.loading-screen{
+  position:fixed;inset:0;background:white;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;gap:16px;
+  transition:opacity .4s;
+}
+.loading-screen.hide{opacity:0;pointer-events:none}
+.loading-logo{font-size:48px;animation:bounce .8s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+.loading-title{font-size:18px;font-weight:700;color:var(--g900)}
+.loading-sub{font-size:13px;color:var(--g500)}
+.loading-bar{width:200px;height:4px;background:var(--g200);border-radius:2px;overflow:hidden}
+.loading-fill{height:100%;background:var(--primary);border-radius:2px;transition:width .3s;width:0}
+
+/* ── BOTTOM NAV ── */
 .bottom-nav{
-  display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
   background:var(--white);border-top:1px solid var(--g200);
-  padding:8px 0 calc(8px + var(--safe-bottom));
-  display:none;grid-template-columns:repeat(5,1fr);
+  padding:8px 0 calc(8px + env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:repeat(5,1fr);
 }
 .bn-item{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
   padding:6px 4px;cursor:pointer;border:none;background:none;
-  color:var(--g500);transition:var(--ease);position:relative;
-  font-size:10px;font-weight:500;min-height:44px;justify-content:center;
+  color:var(--g500);font-size:10px;font-weight:500;min-height:44px;
+  justify-content:center;font-family:inherit;position:relative;
 }
 .bn-item.active{color:var(--primary)}
-.bn-item .bn-icon{font-size:20px;line-height:1}
+.bn-icon{font-size:22px;line-height:1}
 .bn-badge{
-  position:absolute;top:4px;right:calc(50% - 18px);
+  position:absolute;top:4px;right:calc(50% - 20px);
   background:var(--danger);color:white;border-radius:10px;
-  font-size:9px;font-weight:700;padding:1px 5px;min-width:16px;text-align:center;
+  font-size:9px;font-weight:700;padding:1px 5px;
 }
 
-/* ── SIDEBAR (Desktop) ── */
+/* ── SIDEBAR ── */
 .sidebar{
-  position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--white);
+  position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--white);
   border-right:1px solid var(--g200);display:flex;flex-direction:column;
-  z-index:100;box-shadow:var(--sh-sm);transition:transform .3s;
+  z-index:300;box-shadow:var(--sh);transition:transform .3s cubic-bezier(.4,0,.2,1);
 }
-.sidebar-brand{
-  display:flex;align-items:center;gap:10px;
-  padding:20px 20px 16px;border-bottom:1px solid var(--g100);
-}
-.brand-icon{
-  width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--primary),#4285f4);
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-}
-.brand-text{font-size:14px;font-weight:700;line-height:1.2}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 16px) 20px 16px;border-bottom:1px solid var(--g100)}
+.brand-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,var(--primary),#4285f4);display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand-text{font-size:14px;font-weight:700}
 .brand-sub{font-size:11px;color:var(--g500)}
 .sidebar-nav{flex:1;padding:12px 0;overflow-y:auto}
-.nav-label{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;
-  letter-spacing:.8px;padding:4px 20px 8px;margin-top:4px}
-.nav-item{
-  display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;
-  border-radius:0 24px 24px 0;margin:1px 8px 1px 0;color:var(--g700);
-  font-size:13.5px;font-weight:500;transition:var(--ease);
-}
-.nav-item:hover{background:var(--g100)}
+.nav-label{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.8px;padding:4px 20px 8px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;border-radius:0 24px 24px 0;margin:1px 8px 1px 0;color:var(--g700);font-size:13.5px;font-weight:500;transition:var(--ease)}
+.nav-item:hover,.nav-item:active{background:var(--g100)}
 .nav-item.active{background:var(--primary-light);color:var(--primary)}
 .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.nav-badge{
-  margin-left:auto;font-size:11px;font-weight:600;background:var(--danger);
-  color:white;border-radius:10px;padding:1px 6px;min-width:18px;text-align:center;
-}
+.nav-badge{margin-left:auto;font-size:11px;font-weight:600;background:var(--danger);color:white;border-radius:10px;padding:1px 6px}
 .sidebar-footer{padding:12px;border-top:1px solid var(--g100)}
-.sidebar-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
-  z-index:99;backdrop-filter:blur(2px);
-}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:299;backdrop-filter:blur(2px)}
+.sidebar-overlay.open{display:block}
 
 /* ── MAIN ── */
-.main{margin-left:240px;min-height:100vh;display:flex;flex-direction:column}
+.main{min-height:100vh;display:flex;flex-direction:column}
 .topbar{
   background:var(--white);border-bottom:1px solid var(--g200);
-  padding:0 24px;height:60px;display:flex;align-items:center;gap:12px;
+  padding:0 16px;padding-top:env(safe-area-inset-top);
+  height:calc(54px + env(safe-area-inset-top));
+  display:flex;align-items:flex-end;padding-bottom:8px;gap:10px;
   position:sticky;top:0;z-index:50;box-shadow:var(--sh-sm);
 }
-.topbar-menu-btn{
-  display:none;width:40px;height:40px;border-radius:8px;border:none;
-  background:transparent;cursor:pointer;font-size:20px;align-items:center;justify-content:center;
+.topbar-menu{width:40px;height:36px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-title{font-size:16px;font-weight:700;flex:1}
+.topbar-actions{display:flex;gap:6px;align-items:center}
+
+/* ── SYNC STATUS BAR ── */
+.sync-bar{
+  display:flex;align-items:center;gap:8px;padding:8px 16px;
+  font-size:12px;font-weight:500;border-bottom:1px solid var(--g200);
+  background:var(--white);
 }
-.topbar-title{font-size:17px;font-weight:700;flex:1}
-.topbar-actions{display:flex;gap:8px;align-items:center}
+.sync-bar-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-synced{background:var(--success)}
+.dot-syncing{background:var(--warning);animation:pulse 1s infinite}
+.dot-offline{background:var(--g400)}
+.dot-error{background:var(--danger)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-bar-text{flex:1;color:var(--g600)}
+.sync-bar-btn{background:none;border:none;color:var(--primary);font-size:12px;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;font-family:inherit;min-height:auto}
+.sync-bar-btn:active{background:var(--primary-light)}
 
 /* ── BUTTONS ── */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  padding:10px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;
-  cursor:pointer;transition:var(--ease);white-space:nowrap;
-  min-height:44px; /* iOS min touch target */
-  font-family:inherit;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:var(--ease);white-space:nowrap;min-height:44px;font-family:inherit;-webkit-appearance:none}
 .btn-primary{background:var(--primary);color:white}
 .btn-primary:hover{background:var(--primary-dark)}
-.btn-primary:active{transform:scale(.97)}
+.btn-primary:active{opacity:.85}
 .btn-primary:disabled{background:var(--g300);cursor:not-allowed}
 .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
-.btn-outline:hover{background:var(--primary-light)}
+.btn-outline:active{background:var(--primary-light)}
 .btn-ghost{background:transparent;color:var(--g700);border:1.5px solid var(--g200)}
-.btn-ghost:hover{background:var(--g100)}
+.btn-ghost:active{background:var(--g100)}
 .btn-danger{background:var(--danger);color:white}
-.btn-success{background:var(--success);color:white}
 .btn-sm{padding:8px 14px;font-size:12px;min-height:36px;border-radius:8px}
 .btn-xs{padding:5px 10px;font-size:11px;min-height:30px;border-radius:6px}
-.btn-icon{padding:10px;min-width:44px;width:44px}
 
 /* ── PAGES ── */
-.page{display:none;flex:1;padding:20px 20px 24px}
+.page{display:none;padding:14px 14px calc(90px + env(safe-area-inset-bottom)) 14px}
 .page.active{display:block}
 
-/* ── GOOGLE AUTH ── */
-.gauth-btn{
-  display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r-sm);
-  background:var(--white);color:var(--g800);cursor:pointer;border:1.5px solid var(--g200);
-  width:100%;font-size:12.5px;font-weight:500;transition:var(--ease);font-family:inherit;
-}
-.gauth-btn:hover{background:var(--g50)}
-.gauth-btn.signed-in{background:var(--success-light);border-color:var(--success);color:var(--success)}
-.gauth-avatar{width:22px;height:22px;border-radius:50%;object-fit:cover}
-.gauth-info{display:flex;flex-direction:column;text-align:left;flex:1;overflow:hidden}
-.gauth-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gauth-email{font-size:10px;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* ── MOBILE AUTH CARD ── */
-.mobile-auth-card{
-  background:linear-gradient(135deg,#1a73e8,#4285f4);
-  border-radius:var(--r);padding:16px;margin-bottom:16px;color:white;
-}
-.mobile-auth-card-title{font-size:14px;font-weight:700;margin-bottom:4px}
-.mobile-auth-card-desc{font-size:12px;opacity:.85;margin-bottom:12px}
-.mobile-auth-card-btn{
-  background:white;color:var(--primary);border:none;padding:10px 16px;
-  border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;
-  display:inline-flex;align-items:center;gap:6px;min-height:44px;font-family:inherit;
-}
-.mobile-auth-signed{
-  background:var(--success-light);border:1px solid var(--success);
-  border-radius:var(--r);padding:12px 14px;margin-bottom:16px;
-  display:flex;align-items:center;gap:10px;font-size:13px;
-}
-
 /* ── STATS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
-.stat-card{
-  background:var(--white);border-radius:var(--r);padding:14px 16px;
-  box-shadow:var(--sh-sm);border:1px solid var(--g100);
-  display:flex;align-items:center;gap:12px;
-}
-.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:var(--white);border-radius:var(--r);padding:14px;box-shadow:var(--sh-sm);border:1px solid var(--g100);display:flex;align-items:center;gap:10px}
+.stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .stat-value{font-size:22px;font-weight:700;line-height:1}
 .stat-label{font-size:11px;color:var(--g500);margin-top:2px}
 
 /* ── CHART CARDS ── */
-.chart-card{
-  background:var(--white);border-radius:var(--r);padding:16px;
-  box-shadow:var(--sh-sm);border:1px solid var(--g100);margin-bottom:16px;
-}
-.card-title{font-size:14px;font-weight:600;color:var(--g800);margin-bottom:12px}
-.card-subtitle{font-size:12px;color:var(--g500);margin-top:-8px;margin-bottom:12px}
+.chart-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--sh-sm);border:1px solid var(--g100);margin-bottom:12px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:12px}
 
 /* ── DONUT ── */
-.donut-wrap{position:relative;width:120px;height:120px;margin:0 auto 10px;flex-shrink:0}
+.donut-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
 .donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.donut-num{font-size:22px;font-weight:700;line-height:1}
-.donut-lbl{font-size:10px;color:var(--g500)}
+.donut-num{font-size:20px;font-weight:700;line-height:1}
+.donut-lbl{font-size:9px;color:var(--g500)}
 svg.donut{transform:rotate(-90deg)}
-.donut-row{display:flex;align-items:center;gap:16px}
+.donut-row{display:flex;align-items:center;gap:14px}
 .donut-legend{display:flex;flex-direction:column;gap:6px;flex:1}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700)}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ── MEMBER BARS ── */
+/* ── BARS ── */
 .member-bars{display:flex;flex-direction:column;gap:10px}
 .member-bar-row{display:flex;align-items:center;gap:8px}
-.bar-track{flex:1;height:18px;background:var(--g100);border-radius:100px;overflow:hidden;display:flex;gap:1px}
-.bar-seg{height:100%;transition:width .4s}
-.bar-count{font-size:12px;color:var(--g500);width:20px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:16px;background:var(--g100);border-radius:100px;overflow:hidden;display:flex}
+.bar-seg{height:100%}
+.bar-count{font-size:11px;color:var(--g500);width:18px;text-align:right}
 
 /* ── EXPIRY ── */
 .expiry-list{display:flex;flex-direction:column;gap:8px}
-.expiry-item{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border-radius:var(--r-sm);background:var(--g50);border:1px solid var(--g100);cursor:pointer;
-}
-.expiry-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+.expiry-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--g50);border:1px solid var(--g100);cursor:pointer}
+.expiry-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
 .expiry-info{flex:1;min-width:0}
-.expiry-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.expiry-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .expiry-type{font-size:11px;color:var(--g500)}
-.expiry-days{font-size:12px;font-weight:700;padding:4px 8px;border-radius:6px;flex-shrink:0;text-align:center;white-space:nowrap}
-.days-critical{background:var(--danger-light);color:var(--danger)}
-.days-warning{background:var(--warning-light);color:#c77a00}
+.expiry-days{font-size:11px;font-weight:700;padding:4px 7px;border-radius:6px;flex-shrink:0;text-align:center}
+.days-crit{background:var(--danger-light);color:var(--danger)}
+.days-warn{background:var(--warning-light);color:#b06000}
 .days-ok{background:var(--success-light);color:var(--success)}
 
-/* ── POLICY CARDS (Mobile list) ── */
+/* ── AUTH CARD ── */
+.auth-card{background:linear-gradient(135deg,#1a73e8,#4285f4);border-radius:var(--r);padding:16px;margin-bottom:14px;color:white}
+.auth-card-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.auth-card-desc{font-size:12px;opacity:.85;margin-bottom:12px;line-height:1.6}
+.auth-card-btn{background:white;color:var(--primary);border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:44px;font-family:inherit;-webkit-appearance:none}
+.auth-signed-bar{background:var(--success-light);border:1px solid var(--success);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+
+/* ── POLICY CARDS ── */
 .policy-list{display:flex;flex-direction:column;gap:10px}
-.policy-card{
-  background:var(--white);border-radius:var(--r);padding:14px 16px;
-  box-shadow:var(--sh-sm);border:1px solid var(--g100);cursor:pointer;
-  transition:var(--ease);
-}
-.policy-card:active{transform:scale(.98)}
-.policy-card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
-.policy-card-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0}
-.policy-card-info{flex:1;min-width:0}
-.policy-card-name{font-size:14px;font-weight:700;color:var(--g900)}
-.policy-card-company{font-size:12px;color:var(--g500)}
-.policy-card-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.policy-card-date{font-size:11px;color:var(--g600)}
-.policy-card-premium{font-size:12px;font-weight:600;color:var(--primary)}
+.policy-card{background:var(--white);border-radius:var(--r);padding:14px;box-shadow:var(--sh-sm);border:1px solid var(--g100);cursor:pointer;transition:var(--ease);-webkit-user-select:none}
+.policy-card:active{transform:scale(.98);opacity:.9}
+.pc-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.pc-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+.pc-info{flex:1;min-width:0}
+.pc-name{font-size:13px;font-weight:700}
+.pc-company{font-size:12px;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--g600)}
 .pc-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--g100)}
 
-/* ── FILTER BAR ── */
-.filter-bar{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
-.filter-bar::-webkit-scrollbar{display:none}
-.filter-chip{
-  display:inline-flex;align-items:center;gap:5px;padding:8px 14px;
-  border-radius:100px;border:1.5px solid var(--g200);background:var(--white);
-  font-size:12px;font-weight:500;color:var(--g700);cursor:pointer;
-  white-space:nowrap;flex-shrink:0;transition:var(--ease);min-height:36px;
-}
+/* ── FILTER ── */
+.filter-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filter-scroll::-webkit-scrollbar{display:none}
+.filter-chip{display:inline-flex;align-items:center;gap:4px;padding:7px 14px;border-radius:100px;border:1.5px solid var(--g200);background:var(--white);font-size:12px;font-weight:500;color:var(--g700);cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px}
 .filter-chip.active{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
-.search-wrap{
-  display:flex;align-items:center;gap:8px;background:var(--white);
-  border:1.5px solid var(--g200);border-radius:10px;padding:10px 14px;
-  margin-bottom:12px;
-}
-.search-wrap:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
-.search-wrap input{border:none;outline:none;font-size:14px;background:transparent;width:100%;color:var(--g900);font-family:inherit}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--g200);border-radius:10px;padding:10px 14px;margin-bottom:12px}
+.search-wrap:focus-within{border-color:var(--primary)}
+.search-wrap input{border:none;outline:none;font-size:16px;background:transparent;width:100%;color:var(--g900);font-family:inherit}
 
 /* ── BADGES ── */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:600}
@@ -261,277 +209,157 @@ svg.donut{transform:rotate(-90deg)}
 .badge-ci{background:var(--orange-light);color:var(--orange)}
 .badge-other{background:var(--g100);color:var(--g700)}
 .status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px}
-.status-active{background:var(--success)}
-.status-expiring{background:var(--warning)}
-.status-expired{background:var(--danger)}
+.s-active{background:var(--success)}.s-expiring{background:var(--warning)}.s-expired{background:var(--danger)}
 
 /* ── FILE CHIP ── */
-.file-chip{
-  display:inline-flex;align-items:center;gap:4px;padding:4px 8px;
-  background:var(--primary-light);color:var(--primary);border-radius:6px;
-  font-size:11px;font-weight:500;text-decoration:none;max-width:130px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.file-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:var(--primary-light);color:var(--primary);border-radius:6px;font-size:11px;font-weight:500;text-decoration:none}
 
-/* ── UPLOAD AREA ── */
-.upload-area{
-  border:2px dashed var(--g300);border-radius:var(--r-sm);padding:20px;
-  text-align:center;cursor:pointer;background:var(--g50);min-height:80px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-}
-.upload-area input{display:none}
-.file-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.file-item{
-  display:flex;align-items:center;gap:8px;padding:8px 10px;
-  background:var(--white);border:1px solid var(--g200);border-radius:var(--r-sm);
-}
-.file-item-name{flex:1;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-item-size{font-size:11px;color:var(--g500);flex-shrink:0}
-
-/* ── ALERT ── */
-.alert{
-  display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
-  border-radius:var(--r-sm);margin-bottom:12px;border:1px solid;font-size:13px;
-}
-.alert-danger{background:var(--danger-light);border-color:#f5c6c3;color:#c62828}
-.alert-warning{background:var(--warning-light);border-color:#f5e0a0;color:#b06000}
-.alert-info{background:var(--primary-light);border-color:#b3cef5;color:var(--primary-dark)}
-.alert-success{background:var(--success-light);border-color:#a8d8b2;color:#1e6e37}
+/* ── UPLOAD ── */
+.upload-zone{border:2px dashed var(--g300);border-radius:var(--r-sm);padding:20px;text-align:center;cursor:pointer;background:var(--g50);display:flex;flex-direction:column;align-items:center;gap:6px}
+.upload-zone input{display:none}
+.file-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.file-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--white);border:1px solid var(--g200);border-radius:var(--r-sm)}
+.file-item-name{flex:1;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── MODAL ── */
-.modal-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
-  z-index:500;align-items:flex-end;justify-content:center;
-  backdrop-filter:blur(3px);
-}
-.modal-overlay.open{display:flex;animation:fadeIn .15s}
-@keyframes fadeIn{from{opacity:0}}
-.modal{
-  background:var(--white);border-radius:var(--r-lg) var(--r-lg) 0 0;
-  width:100%;max-height:92vh;overflow-y:auto;
-  animation:slideUp .25s cubic-bezier(.4,0,.2,1);
-  padding-bottom:calc(env(safe-area-inset-bottom));
-}
-@keyframes slideUp{from{transform:translateY(100%)}}
-.modal-handle{
-  width:36px;height:4px;background:var(--g300);border-radius:2px;
-  margin:10px auto 0;
-}
-.modal-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px 14px;border-bottom:1px solid var(--g100);
-  position:sticky;top:0;background:var(--white);z-index:1;
-}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex;animation:fi .15s}
+@keyframes fi{from{opacity:0}}
+.modal{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-height:93vh;overflow-y:auto;animation:su .25s cubic-bezier(.4,0,.2,1);padding-bottom:env(safe-area-inset-bottom);-webkit-overflow-scrolling:touch}
+@keyframes su{from{transform:translateY(100%)}}
+.modal-handle{width:36px;height:4px;background:var(--g300);border-radius:2px;margin:10px auto 0}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px;border-bottom:1px solid var(--g100);position:sticky;top:0;background:var(--white);z-index:1}
 .modal-title{font-size:16px;font-weight:700}
-.modal-close{
-  width:36px;height:36px;border-radius:50%;border:none;background:var(--g100);
-  cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
-  color:var(--g600);
-}
-.modal-body{padding:16px 20px}
-.modal-footer{
-  display:flex;gap:10px;padding:14px 20px;border-top:1px solid var(--g100);
-  position:sticky;bottom:0;background:var(--white);
-  padding-bottom:calc(14px + env(safe-area-inset-bottom));
-}
+.modal-close{width:34px;height:34px;border-radius:50%;border:none;background:var(--g100);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--g600)}
+.modal-body{padding:16px 18px}
+.modal-footer{display:flex;gap:8px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--g100);position:sticky;bottom:0;background:var(--white)}
+.modal-footer .btn{flex:1}
 
 /* ── FORM ── */
 .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-label.form-label{font-size:12px;font-weight:600;color:var(--g700)}
-.form-label span.req{color:var(--danger);margin-left:2px}
-input.form-input,select.form-input,textarea.form-input{
-  background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r-sm);
-  padding:12px 14px;font-size:16px; /* 16px prevents iOS zoom */
-  color:var(--g900);transition:var(--ease);outline:none;width:100%;font-family:inherit;
-  -webkit-appearance:none;appearance:none;
-}
-input.form-input:focus,select.form-input:focus,textarea.form-input:focus{
-  border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.1);
-}
+.form-label{font-size:12px;font-weight:600;color:var(--g700)}
+.form-label .req{color:var(--danger);margin-left:2px}
+.form-input{background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r-sm);padding:12px 14px;font-size:16px;color:var(--g900);outline:none;width:100%;font-family:inherit;-webkit-appearance:none;appearance:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--primary)}
 textarea.form-input{resize:vertical;min-height:72px}
-select.form-input{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0a6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
-}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-divider{border:none;border-top:1px solid var(--g100);margin:8px 0 14px}
-.form-section-title{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0a6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-divider{border:none;border-top:1px solid var(--g100);margin:4px 0 14px}
+.form-sec{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
 
 /* ── TYPE SELECTOR ── */
-.type-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.type-chip{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:10px 8px;border-radius:10px;cursor:pointer;
-  border:1.5px solid var(--g200);background:var(--white);
-  font-size:11px;font-weight:600;color:var(--g600);transition:var(--ease);
-  min-height:60px;justify-content:center;
-}
-.type-chip-icon{font-size:20px}
-.type-chip.sel-health{border-color:var(--success);background:var(--success-light);color:var(--success)}
-.type-chip.sel-accident{border-color:var(--warning);background:var(--warning-light);color:#c77a00}
-.type-chip.sel-life{border-color:var(--purple);background:var(--purple-light);color:var(--purple)}
-.type-chip.sel-ci{border-color:var(--orange);background:var(--orange-light);color:var(--orange)}
-.type-chip.sel-other{border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
+.type-selector{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.type-chip{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border-radius:10px;cursor:pointer;border:1.5px solid var(--g200);background:var(--white);font-size:10px;font-weight:600;color:var(--g600);min-height:58px;justify-content:center}
+.tc-icon{font-size:20px}
+.tc-sel-health{border-color:var(--success);background:var(--success-light);color:var(--success)}
+.tc-sel-accident{border-color:var(--warning);background:var(--warning-light);color:#c77a00}
+.tc-sel-life{border-color:var(--purple);background:var(--purple-light);color:var(--purple)}
+.tc-sel-ci{border-color:var(--orange);background:var(--orange-light);color:var(--orange)}
+.tc-sel-other{border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
 
-/* ── COVERAGE GRID ── */
-.coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.coverage-check{
-  display:flex;align-items:center;gap:8px;padding:8px 10px;
-  border:1.5px solid var(--g200);border-radius:8px;cursor:pointer;
-  font-size:12.5px;color:var(--g700);transition:var(--ease);
-}
-.coverage-check input{
-  width:16px;height:16px;cursor:pointer;accent-color:var(--primary);flex-shrink:0;
-}
-.coverage-check:has(input:checked){border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
+/* ── COVERAGE ── */
+.cov-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cov-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--g200);border-radius:8px;cursor:pointer;font-size:12px;color:var(--g700)}
+.cov-item input{width:16px;height:16px;accent-color:var(--primary);flex-shrink:0;cursor:pointer}
+.cov-item:has(input:checked){border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
 
-/* ── DETAIL VIEW ── */
-.detail-hero{
-  background:var(--g50);border-radius:var(--r-sm);padding:14px;margin-bottom:14px;
-  display:flex;align-items:center;gap:12px;
-}
-.detail-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;flex-shrink:0}
-.detail-rows{display:flex;flex-direction:column;gap:10px}
-.detail-row{display:flex;flex-direction:column;gap:3px;padding:10px 12px;background:var(--g50);border-radius:8px}
-.detail-key{font-size:11px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.4px}
-.detail-val{font-size:14px;font-weight:600;color:var(--g900)}
-.detail-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.coverage-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.coverage-tag{background:var(--primary-light);color:var(--primary);font-size:11px;font-weight:500;padding:3px 7px;border-radius:5px}
+/* ── DETAIL ── */
+.detail-hero{background:var(--g50);border-radius:var(--r-sm);padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.detail-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:white;flex-shrink:0}
+.detail-rows{display:flex;flex-direction:column;gap:8px}
+.detail-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.detail-row{padding:10px 12px;background:var(--g50);border-radius:8px}
+.detail-k{font-size:10px;font-weight:600;color:var(--g500);text-transform:uppercase;margin-bottom:3px}
+.detail-v{font-size:13px;font-weight:600;color:var(--g900)}
+.cov-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.cov-tag{background:var(--primary-light);color:var(--primary);font-size:11px;padding:3px 7px;border-radius:5px;font-weight:500}
 
 /* ── MEMBER PAGE ── */
-.members-list{display:flex;flex-direction:column;gap:10px}
-.member-item{
-  background:var(--white);border-radius:var(--r);padding:14px 16px;
-  box-shadow:var(--sh-sm);border:1px solid var(--g100);
-  display:flex;align-items:center;gap:12px;
-}
-.member-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:white;flex-shrink:0}
-.member-info{flex:1;min-width:0}
-.member-name{font-size:14px;font-weight:700}
-.member-meta{font-size:12px;color:var(--g500);margin-top:2px}
-.member-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.member-list{display:flex;flex-direction:column;gap:10px}
+.member-item{background:var(--white);border-radius:var(--r);padding:14px;box-shadow:var(--sh-sm);border:1px solid var(--g100);display:flex;align-items:center;gap:12px}
+.m-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:white;flex-shrink:0}
+.m-info{flex:1;min-width:0}
+.m-name{font-size:14px;font-weight:700}
+.m-meta{font-size:11px;color:var(--g500);margin-top:2px}
+.m-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
 .mini-badge{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600}
 
 /* ── SETTINGS ── */
-.config-card{
-  background:var(--white);border-radius:var(--r);padding:16px;
-  box-shadow:var(--sh-sm);border:1px solid var(--g100);margin-bottom:14px;
-}
-.config-title{font-size:14px;font-weight:700;margin-bottom:4px}
-.config-desc{font-size:12px;color:var(--g500);margin-bottom:14px}
-.step-list{list-style:none;counter-reset:step}
-.step-list li{
-  counter-increment:step;padding:8px 0 8px 34px;position:relative;
-  font-size:13px;color:var(--g700);border-bottom:1px solid var(--g100);
-}
+.cfg-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--sh-sm);border:1px solid var(--g100);margin-bottom:12px}
+.cfg-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.cfg-desc{font-size:12px;color:var(--g500);margin-bottom:14px;line-height:1.6}
+.step-list{list-style:none;counter-reset:s}
+.step-list li{counter-increment:s;padding:8px 0 8px 32px;position:relative;font-size:13px;color:var(--g700);border-bottom:1px solid var(--g100)}
 .step-list li:last-child{border-bottom:none}
-.step-list li::before{
-  content:counter(step);position:absolute;left:0;top:8px;
-  width:22px;height:22px;background:var(--primary);color:white;
-  border-radius:50%;font-size:11px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-}
-.code-block{
-  background:var(--g900);color:#a8d8a8;padding:10px 12px;border-radius:var(--r-sm);
-  font-size:11px;font-family:'Menlo','Consolas',monospace;overflow-x:auto;
-  line-height:1.7;margin:8px 0;word-break:break-all;
-}
-.sync-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--g50);border-radius:8px;border:1px solid var(--g200);font-size:13px}
-.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sync-active{background:var(--success);animation:pulse 2s infinite}
-.sync-inactive{background:var(--g400)}
+.step-list li::before{content:counter(s);position:absolute;left:0;top:8px;width:22px;height:22px;background:var(--primary);color:white;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.code-block{background:var(--g900);color:#a8d8a8;padding:10px 12px;border-radius:var(--r-sm);font-size:11px;font-family:'Menlo',monospace;overflow-x:auto;line-height:1.7;margin:8px 0;word-break:break-all}
+.sync-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--g50);border-radius:8px;border:1px solid var(--g200);font-size:13px;margin-bottom:10px}
+.sd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sd-on{background:var(--success);animation:pulse 2s infinite}
+.sd-off{background:var(--g400)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* ── DRIVE FOLDER CARD ── */
-.drive-folder-card{
-  background:linear-gradient(135deg,#1a73e8,#4285f4);color:white;
-  border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;
-  margin-bottom:12px;text-decoration:none;
-}
-.attached-file{
-  display:flex;align-items:center;gap:8px;padding:8px 10px;
-  background:var(--white);border:1px solid var(--g200);border-radius:8px;margin-bottom:6px;
-}
-.attached-file-info{flex:1;min-width:0}
-.attached-file-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.attached-file-meta{font-size:11px;color:var(--g500)}
+/* ── ALERT ── */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--r-sm);margin-bottom:12px;border:1px solid;font-size:13px;line-height:1.5}
+.alert-danger{background:var(--danger-light);border-color:#f5c6c3;color:#c62828}
+.alert-warning{background:var(--warning-light);border-color:#f5e0a0;color:#b06000}
+.alert-info{background:var(--primary-light);border-color:#b3cef5;color:var(--primary-dark)}
 
 /* ── TOAST ── */
-.toast-container{position:fixed;bottom:calc(80px + var(--safe-bottom));right:16px;left:16px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{
-  background:var(--g900);color:white;padding:12px 14px;border-radius:10px;
-  font-size:13px;display:flex;align-items:center;gap:8px;
-  box-shadow:var(--sh-lg);animation:toastIn .3s;pointer-events:all;
-}
-@keyframes toastIn{from{transform:translateY(20px);opacity:0}}
-.toast-success{background:var(--success)}
-.toast-error{background:var(--danger)}
-.toast-warn{background:#c77a00}
+.toast-wrap{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));left:12px;right:12px;z-index:999;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.toast{background:var(--g900);color:white;padding:12px 14px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:var(--sh-lg);animation:ti .25s;pointer-events:all}
+@keyframes ti{from{transform:translateY(10px);opacity:0}}
+.t-success{background:var(--success)}.t-error{background:var(--danger)}.t-warn{background:#b06000}
 
 /* ── SPINNER ── */
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0}
-.spinner-dark{border-color:rgba(26,115,232,.2);border-top-color:var(--primary)}
-@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:sp .6s linear infinite;flex-shrink:0}
+.spin-dark{border-color:rgba(26,115,232,.2);border-top-color:var(--primary)}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-/* ── EMPTY STATE ── */
-.empty-state{text-align:center;padding:48px 24px}
+/* ── EMPTY ── */
+.empty{text-align:center;padding:48px 20px}
 .empty-icon{font-size:44px;margin-bottom:12px;opacity:.4}
 .empty-title{font-size:15px;font-weight:600;color:var(--g700);margin-bottom:6px}
-.empty-desc{font-size:12px;color:var(--g500);max-width:280px;margin:0 auto 16px}
+.empty-desc{font-size:12px;color:var(--g500);max-width:260px;margin:0 auto 16px}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-thumb{background:var(--g300);border-radius:2px}
-
-/* ═══════════════════════════════
-   RESPONSIVE BREAKPOINTS
-═══════════════════════════════ */
-
-/* ── Tablet (768px+) ── */
-@media (min-width:768px){
-  .stats-grid{grid-template-columns:repeat(4,1fr)}
+/* ── DESKTOP ── */
+@media(min-width:768px){
+  .stats-grid{grid-template-columns:repeat(4,1fr);gap:14px}
   .form-row{grid-template-columns:1fr 1fr}
-  .modal{border-radius:var(--r-lg);max-width:600px;margin:auto;animation:modalIn .2s}
-  @keyframes modalIn{from{transform:scale(.95);opacity:0}}
+  .cov-grid{grid-template-columns:repeat(3,1fr)}
+  .detail-2{grid-template-columns:1fr 1fr}
+  .member-list{display:grid;grid-template-columns:repeat(2,1fr)}
+  .modal{border-radius:var(--r-lg);max-width:600px;margin:auto;animation:mi .2s}
+  @keyframes mi{from{transform:scale(.95);opacity:0}}
   .modal-handle{display:none}
   .modal-overlay{align-items:center}
-  .coverage-grid{grid-template-columns:repeat(3,1fr)}
-  .type-selector{grid-template-columns:repeat(5,1fr)}
-  .detail-2col{grid-template-columns:1fr 1fr}
-  .members-list{display:grid;grid-template-columns:repeat(2,1fr)}
+  .modal-footer{flex-direction:row}
+  .modal-footer .btn{flex:none}
 }
-
-/* ── Desktop (1024px+) ── */
-@media (min-width:1024px){
+@media(min-width:1024px){
   .bottom-nav{display:none!important}
-  .topbar-menu-btn{display:none!important}
-  .sidebar{transform:translateX(0)!important}
-  .main{margin-left:240px}
-  .topbar{padding:0 28px}
-  .page{padding:24px 28px}
-  .stats-grid{grid-template-columns:repeat(4,1fr);gap:16px}
-  .toast-container{left:auto;width:320px;bottom:24px}
+  .topbar-menu{display:none!important}
+  .sidebar{transform:none!important}
+  .main{margin-left:260px}
+  .topbar{height:60px;padding:0 28px}
+  .page{padding:24px 28px 32px}
+  .toast-wrap{left:auto;right:24px;bottom:24px;width:320px}
 }
-
-/* ── Mobile only (< 768px) ── */
-@media (max-width:767px){
-  .sidebar{transform:translateX(-100%);width:280px}
+@media(max-width:1023px){
+  .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
-  .sidebar-overlay.open{display:block}
-  .topbar-menu-btn{display:flex}
-  .main{margin-left:0}
-  .page{padding:14px 14px calc(80px + var(--safe-bottom)) 14px}
-  .bottom-nav{display:grid}
-  .topbar{height:54px;padding:0 14px;padding-left:calc(14px + var(--safe-left));padding-right:calc(14px + var(--safe-right))}
-  .topbar-title{font-size:15px}
-  .btn-primary .btn-label-long{display:none}
-  .modal-footer{flex-direction:column}
-  .modal-footer .btn{width:100%}
 }
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-logo">🛡️</div>
+  <div class="loading-title">Family Insurance</div>
+  <div class="loading-sub" id="loading-sub">กำลังโหลด...</div>
+  <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
+</div>
 
 <!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
@@ -544,71 +372,65 @@ select.form-input{
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">ภาพรวม</div>
-    <div class="nav-item active" onclick="navigate('dashboard');closeSidebar()"><span class="nav-icon">📊</span>Dashboard</div>
-    <div class="nav-item" onclick="navigate('policies');closeSidebar()">
-      <span class="nav-icon">📋</span>กรมธรรม์ทั้งหมด
-      <span class="nav-badge" id="expiring-count-side" style="display:none">0</span>
-    </div>
-    <div class="nav-label" style="margin-top:8px">ประเภทประกัน</div>
-    <div class="nav-item" onclick="navigate('policies');setTypeFilter('health');closeSidebar()"><span class="nav-icon">❤️‍🩹</span>ประกันสุขภาพ</div>
-    <div class="nav-item" onclick="navigate('policies');setTypeFilter('accident');closeSidebar()"><span class="nav-icon">⚡</span>ประกันอุบัติเหตุ</div>
-    <div class="nav-item" onclick="navigate('policies');setTypeFilter('life');closeSidebar()"><span class="nav-icon">🌿</span>ประกันชีวิต</div>
-    <div class="nav-item" onclick="navigate('policies');setTypeFilter('ci');closeSidebar()"><span class="nav-icon">🏥</span>โรคร้ายแรง</div>
+    <div class="nav-item active" onclick="goTo('dashboard')"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="goTo('policies')"><span class="nav-icon">📋</span>กรมธรรม์
+      <span class="nav-badge" id="nb-side" style="display:none">0</span></div>
+    <div class="nav-label" style="margin-top:8px">ประเภท</div>
+    <div class="nav-item" onclick="goTo('policies');setFilter2('health')"><span class="nav-icon">❤️‍🩹</span>สุขภาพ</div>
+    <div class="nav-item" onclick="goTo('policies');setFilter2('accident')"><span class="nav-icon">⚡</span>อุบัติเหตุ</div>
+    <div class="nav-item" onclick="goTo('policies');setFilter2('life')"><span class="nav-icon">🌿</span>ชีวิต</div>
+    <div class="nav-item" onclick="goTo('policies');setFilter2('ci')"><span class="nav-icon">🏥</span>โรคร้ายแรง</div>
     <div class="nav-label" style="margin-top:8px">จัดการ</div>
-    <div class="nav-item" onclick="navigate('members');closeSidebar()"><span class="nav-icon">👨‍👩‍👧‍👦</span>สมาชิกครอบครัว</div>
-    <div class="nav-item" onclick="navigate('settings');closeSidebar()"><span class="nav-icon">⚙️</span>ตั้งค่า Google</div>
+    <div class="nav-item" onclick="goTo('members')"><span class="nav-icon">👨‍👩‍👧‍👦</span>สมาชิก</div>
+    <div class="nav-item" onclick="goTo('settings')"><span class="nav-icon">⚙️</span>ตั้งค่า</div>
   </nav>
   <div class="sidebar-footer">
-    <div id="sidebar-auth-area">
-      <button class="gauth-btn" onclick="handleSignIn()">
-        <span style="font-size:16px">🔐</span>
-        <div class="gauth-info"><div class="gauth-name">เข้าสู่ระบบ Google</div><div class="gauth-email">Sheets & Drive</div></div>
-      </button>
-    </div>
+    <div id="side-auth"></div>
   </div>
 </aside>
 
 <!-- MAIN -->
 <div class="main">
-  <!-- TOPBAR -->
   <div class="topbar">
-    <button class="topbar-menu-btn" onclick="openSidebar()">☰</button>
+    <button class="topbar-menu" onclick="openSidebar()">☰</button>
     <div class="topbar-title" id="page-title">📊 Dashboard</div>
     <div class="topbar-actions">
-      <div id="sync-indicator" style="display:none;align-items:center;gap:6px;font-size:12px;color:var(--g600)">
-        <div class="spinner spinner-dark"></div>
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="openAddModal()">
-        <span>＋</span><span class="btn-label-long">เพิ่มกรมธรรม์</span>
-      </button>
+      <button class="btn btn-primary btn-sm" onclick="openAddModal()">＋ เพิ่ม</button>
     </div>
   </div>
 
-  <!-- ══ DASHBOARD ══ -->
+  <!-- SYNC STATUS BAR -->
+  <div class="sync-bar" id="sync-bar">
+    <div class="sync-bar-dot dot-offline" id="sync-dot"></div>
+    <div class="sync-bar-text" id="sync-text">ยังไม่ได้เชื่อมต่อ Google</div>
+    <button class="sync-bar-btn" id="sync-action-btn" onclick="handleSyncBarAction()">เชื่อมต่อ</button>
+  </div>
+
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div id="alert-area"></div>
-    <div id="mobile-auth-area"></div>
+    <div id="dash-auth-area"></div>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-icon" style="background:#e8f0fe">📋</div><div><div class="stat-value" id="s-total">0</div><div class="stat-label">กรมธรรม์</div></div></div>
       <div class="stat-card"><div class="stat-icon" style="background:#e6f4ea">✅</div><div><div class="stat-value" id="s-active" style="color:var(--success)">0</div><div class="stat-label">คุ้มครองอยู่</div></div></div>
-      <div class="stat-card"><div class="stat-icon" style="background:#fef9e7">⚠️</div><div><div class="stat-value" id="s-expiring" style="color:#c77a00">0</div><div class="stat-label">ใกล้หมดอายุ</div></div></div>
-      <div class="stat-card"><div class="stat-icon" style="background:#fce8e6">💰</div><div><div class="stat-value" id="s-premium" style="color:var(--primary);font-size:18px">-</div><div class="stat-label">เบี้ยรวม/ปี ฿</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#fef9e7">⚠️</div><div><div class="stat-value" id="s-expiring" style="color:#c77a00">0</div><div class="stat-label">ใกล้หมด</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#fce8e6">💰</div><div><div class="stat-value" id="s-premium" style="color:var(--primary);font-size:17px">-</div><div class="stat-label">เบี้ยรวม/ปี ฿</div></div></div>
     </div>
     <div class="chart-card">
       <div class="card-title">สัดส่วนประเภทประกัน</div>
       <div class="donut-row">
         <div class="donut-wrap">
-          <svg class="donut" id="donut-svg" width="120" height="120" viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="46" fill="none" stroke="#e8eaed" stroke-width="14"/>
+          <svg class="donut" id="donut-svg" width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="42" fill="none" stroke="#e8eaed" stroke-width="13"/>
           </svg>
           <div class="donut-center"><div class="donut-num" id="donut-num">0</div><div class="donut-lbl">รายการ</div></div>
         </div>
-        <div class="donut-legend" id="donut-legend"><span style="color:var(--g400);font-size:12px">ยังไม่มีข้อมูล</span></div>
+        <div class="donut-legend" id="donut-legend"></div>
       </div>
     </div>
     <div class="chart-card">
       <div class="card-title">กรมธรรม์แต่ละสมาชิก</div>
-      <div class="member-bars" id="member-bars"><div style="text-align:center;padding:16px;color:var(--g400);font-size:13px">ยังไม่มีข้อมูล</div></div>
+      <div class="member-bars" id="member-bars"></div>
     </div>
     <div class="chart-card">
       <div class="card-title">🔔 ใกล้หมดอายุ (90 วัน)</div>
@@ -616,110 +438,91 @@ select.form-input{
     </div>
   </div>
 
-  <!-- ══ POLICIES ══ -->
+  <!-- POLICIES -->
   <div class="page" id="page-policies">
-    <div class="search-wrap">
-      <span>🔍</span>
-      <input type="search" id="search-input" placeholder="ค้นหาชื่อ, บริษัท, เลขกรมธรรม์..." oninput="renderPolicies()" autocorrect="off" autocapitalize="off">
-    </div>
-    <div class="filter-bar" id="filter-bar">
-      <div class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">ทั้งหมด</div>
-      <div class="filter-chip" data-filter="health" onclick="setFilter(this,'health')">❤️‍🩹 สุขภาพ</div>
-      <div class="filter-chip" data-filter="accident" onclick="setFilter(this,'accident')">⚡ อุบัติเหตุ</div>
-      <div class="filter-chip" data-filter="life" onclick="setFilter(this,'life')">🌿 ชีวิต</div>
-      <div class="filter-chip" data-filter="ci" onclick="setFilter(this,'ci')">🏥 CI</div>
-      <div class="filter-chip" data-filter="expiring" onclick="setFilter(this,'expiring')">⚠️ ใกล้หมด</div>
-      <div class="filter-chip" data-filter="expired" onclick="setFilter(this,'expired')">❌ หมดแล้ว</div>
+    <div class="search-wrap"><span>🔍</span><input type="search" id="q" placeholder="ค้นหา..." oninput="renderPolicies()" autocorrect="off" autocapitalize="off"></div>
+    <div class="filter-scroll">
+      <div class="filter-chip active" data-f="all" onclick="setFilter(this,'all')">ทั้งหมด</div>
+      <div class="filter-chip" data-f="health" onclick="setFilter(this,'health')">❤️‍🩹 สุขภาพ</div>
+      <div class="filter-chip" data-f="accident" onclick="setFilter(this,'accident')">⚡ อุบัติเหตุ</div>
+      <div class="filter-chip" data-f="life" onclick="setFilter(this,'life')">🌿 ชีวิต</div>
+      <div class="filter-chip" data-f="ci" onclick="setFilter(this,'ci')">🏥 CI</div>
+      <div class="filter-chip" data-f="expiring" onclick="setFilter(this,'expiring')">⚠️ ใกล้หมด</div>
     </div>
     <div class="policy-list" id="policy-list"></div>
-    <div id="empty-state" class="empty-state" style="display:none">
+    <div id="empty-state" class="empty" style="display:none">
       <div class="empty-icon">🛡️</div>
       <div class="empty-title">ยังไม่มีกรมธรรม์</div>
-      <div class="empty-desc">กดปุ่ม ＋ เพื่อเริ่มบันทึกกรมธรรม์ของครอบครัว</div>
+      <div class="empty-desc">กดปุ่ม ＋ เพิ่ม เพื่อเริ่มบันทึก</div>
       <button class="btn btn-primary" onclick="openAddModal()">＋ เพิ่มกรมธรรม์แรก</button>
     </div>
   </div>
 
-  <!-- ══ MEMBERS ══ -->
+  <!-- MEMBERS -->
   <div class="page" id="page-members">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
       <button class="btn btn-primary btn-sm" onclick="openMemberModal()">＋ เพิ่มสมาชิก</button>
     </div>
-    <div class="members-list" id="members-list"></div>
+    <div class="member-list" id="member-list"></div>
   </div>
 
-  <!-- ══ SETTINGS ══ -->
+  <!-- SETTINGS -->
   <div class="page" id="page-settings">
-    <!-- Auth status -->
-    <div class="config-card">
-      <div class="config-title">🔐 Google Account</div>
+    <div class="cfg-card">
+      <div class="cfg-title">🔐 Google Account</div>
       <div id="settings-auth"></div>
     </div>
-    <!-- Client ID -->
-    <div class="config-card">
-      <div class="config-title">⚙️ ตั้งค่า OAuth Client ID</div>
-      <div class="config-desc">สร้างจาก Google Cloud Console → OAuth 2.0 Client ID (Web Application)</div>
-      <ol class="step-list">
-        <li>ไปที่ <strong>console.cloud.google.com</strong> → New Project</li>
-        <li>Enable <strong>Google Sheets API</strong> + <strong>Google Drive API</strong></li>
-        <li>Credentials → OAuth 2.0 Client ID → Web Application</li>
-        <li>Authorized origins: <code id="current-origin" style="background:var(--g100);padding:2px 6px;border-radius:4px;font-size:11px;word-break:break-all"></code></li>
-        <li>คัดลอก <strong>Client ID</strong> มาวางด้านล่าง</li>
-      </ol>
-      <div class="form-group" style="margin-top:14px">
-        <label class="form-label">Google OAuth Client ID</label>
+    <div class="cfg-card">
+      <div class="cfg-title">⚙️ ตั้งค่า OAuth Client ID</div>
+      <div class="cfg-desc">สร้างจาก Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Client ID (Web Application)<br>แล้วเพิ่ม Authorized origins: <code id="curr-origin" style="background:var(--g100);padding:2px 5px;border-radius:4px;font-size:11px;word-break:break-all"></code></div>
+      <div class="form-group">
+        <div class="form-label">Google OAuth Client ID</div>
         <input type="text" class="form-input" id="client-id-input" placeholder="xxx.apps.googleusercontent.com" autocorrect="off" autocapitalize="none">
       </div>
       <button class="btn btn-primary" onclick="saveClientId()" style="width:100%">💾 บันทึก Client ID</button>
     </div>
-    <!-- Sheets -->
-    <div class="config-card">
-      <div class="config-title">📊 Google Sheets — ข้อมูลกรมธรรม์</div>
-      <div class="config-desc">
-        วิธีหา Spreadsheet ID: เปิด Google Sheet แล้วดูจาก URL<br>
-        <code style="font-size:11px;word-break:break-all;background:var(--g100);padding:2px 4px;border-radius:3px">docs.google.com/spreadsheets/d/<strong style="color:var(--primary)">[ID อยู่ตรงนี้]</strong>/edit</code>
+    <div class="cfg-card" style="border:2px solid var(--primary);border-radius:var(--r)">
+      <div class="cfg-title" style="color:var(--primary)">📊 Google Sheets — แหล่งข้อมูลหลัก</div>
+      <div class="cfg-desc">
+        ✅ <strong>ข้อมูลจะเหมือนกันทุกอุปกรณ์</strong> — iPhone, iPad, PC อ่านจาก Sheet เดียวกัน<br><br>
+        📌 วิธีหา Spreadsheet ID จาก URL:<br>
+        <code style="font-size:11px;background:var(--g100);padding:4px 8px;border-radius:4px;display:block;margin-top:6px;word-break:break-all">docs.google.com/spreadsheets/d/<strong style="color:var(--primary)">[ID อยู่ตรงนี้]</strong>/edit</code>
       </div>
       <div class="form-group">
-        <label class="form-label">Spreadsheet ID <span class="req">*</span></label>
-        <input type="text" class="form-input" id="sheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjg..." autocorrect="off" autocapitalize="none">
+        <div class="form-label">Spreadsheet ID <span class="req">*</span></div>
+        <input type="text" class="form-input" id="sheet-id" placeholder="1BxiMVs0XRA5..." autocorrect="off" autocapitalize="none">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Sheet Name</label>
+          <div class="form-label">Sheet Name</div>
           <input type="text" class="form-input" id="sheet-name" value="Policies" autocorrect="off">
         </div>
         <div class="form-group">
-          <label class="form-label">Auto-sync ทุก (นาที)</label>
-          <select class="form-input" id="sync-interval">
-            <option value="0">ปิด</option><option value="5">5</option>
-            <option value="15" selected>15</option><option value="30">30</option><option value="60">60</option>
-          </select>
+          <div class="form-label">Members Sheet</div>
+          <input type="text" class="form-input" id="members-sheet-name" value="Members" autocorrect="off">
         </div>
       </div>
-      <div id="sheet-sync-status" class="sync-row" style="margin-bottom:12px">
-        <div class="sync-dot sync-inactive"></div><span>ยังไม่ได้เชื่อมต่อ</span>
+      <div class="sync-row" id="sheet-status-row">
+        <div class="sd sd-off" id="sheet-sd"></div>
+        <span id="sheet-status-text">ยังไม่ได้เชื่อมต่อ</span>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-primary btn-sm" onclick="saveSheetConfig()">💾 บันทึก</button>
-        <button class="btn btn-outline btn-sm" onclick="syncToSheet()">🔄 Sync ตอนนี้</button>
-        <button class="btn btn-ghost btn-sm" onclick="importFromSheet()">📥 Import</button>
+        <button class="btn btn-outline btn-sm" onclick="pullFromSheet()">📥 โหลดจาก Sheet</button>
+        <button class="btn btn-ghost btn-sm" onclick="pushToSheet()">📤 บันทึกขึ้น Sheet</button>
       </div>
-      <div class="code-block" style="margin-top:12px">id | member | type | company | policy_no | plan_name | start_date | end_date | premium | sum_insured | coverage | beneficiary | drive_files | notes | updated_at</div>
     </div>
-    <!-- Drive -->
-    <div class="config-card">
-      <div class="config-title">📁 Google Drive — ไฟล์กรมธรรม์</div>
-      <div class="config-desc">ไฟล์แนบจะถูกอัพโหลดไปยัง Drive → Family Insurance → [ชื่อสมาชิก]</div>
-      <div id="drive-folder-display"></div>
+    <div class="cfg-card">
+      <div class="cfg-title">📁 Google Drive — ไฟล์แนบ</div>
+      <div id="drive-card-area"></div>
       <div class="form-group">
-        <label class="form-label">Root Folder ID (ปล่อยว่าง = สร้างใหม่อัตโนมัติ)</label>
+        <div class="form-label">Root Folder ID (ปล่อยว่าง = สร้างอัตโนมัติ)</div>
         <input type="text" class="form-input" id="drive-folder-id" placeholder="ปล่อยว่างแล้วกดสร้าง" autocorrect="off" autocapitalize="none">
       </div>
       <button class="btn btn-outline btn-sm" onclick="initDriveFolder()" style="width:100%">📁 สร้าง / เชื่อม Folder</button>
     </div>
-    <!-- Data mgmt -->
-    <div class="config-card" style="border-color:#fce8e6">
-      <div class="config-title" style="color:var(--danger)">🗑️ จัดการข้อมูล</div>
+    <div class="cfg-card" style="border-color:var(--danger-light)">
+      <div class="cfg-title" style="color:var(--danger)">🗑️ จัดการข้อมูล</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
         <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 Export CSV</button>
         <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑️ ล้างข้อมูล</button>
@@ -729,159 +532,104 @@ select.form-input{
 </div>
 
 <!-- BOTTOM NAV -->
-<nav class="bottom-nav" id="bottom-nav">
-  <button class="bn-item active" data-page="dashboard" onclick="navigate('dashboard')">
-    <span class="bn-icon">📊</span>หน้าหลัก
-  </button>
-  <button class="bn-item" data-page="policies" onclick="navigate('policies')">
-    <span class="bn-icon">📋</span>กรมธรรม์
-    <span class="bn-badge" id="expiring-count-bn" style="display:none">0</span>
-  </button>
+<nav class="bottom-nav">
+  <button class="bn-item active" data-p="dashboard" onclick="goTo('dashboard')"><span class="bn-icon">📊</span>หน้าหลัก</button>
+  <button class="bn-item" data-p="policies" onclick="goTo('policies')"><span class="bn-icon">📋</span>กรมธรรม์<span class="bn-badge" id="nb-bn" style="display:none">0</span></button>
   <button class="bn-item" onclick="openAddModal()" style="color:var(--primary)">
-    <span class="bn-icon" style="background:var(--primary);color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px">＋</span>
-    <span style="margin-top:2px">เพิ่ม</span>
+    <span class="bn-icon" style="background:var(--primary);color:white;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:1px">＋</span>เพิ่ม
   </button>
-  <button class="bn-item" data-page="members" onclick="navigate('members')">
-    <span class="bn-icon">👨‍👩‍👧‍👦</span>สมาชิก
-  </button>
-  <button class="bn-item" data-page="settings" onclick="navigate('settings')">
-    <span class="bn-icon">⚙️</span>ตั้งค่า
-  </button>
+  <button class="bn-item" data-p="members" onclick="goTo('members')"><span class="bn-icon">👨‍👩‍👧‍👦</span>สมาชิก</button>
+  <button class="bn-item" data-p="settings" onclick="goTo('settings')"><span class="bn-icon">⚙️</span>ตั้งค่า</button>
 </nav>
 
 <!-- ADD/EDIT MODAL -->
 <div class="modal-overlay" id="policy-modal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title" id="modal-title">➕ เพิ่มกรมธรรม์</div>
-      <button class="modal-close" onclick="closeModal('policy-modal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-title" id="modal-title">➕ เพิ่มกรมธรรม์</div><button class="modal-close" onclick="closeModal('policy-modal')">✕</button></div>
     <div class="modal-body">
       <div class="form-group">
-        <label class="form-label">ประเภทประกัน <span class="req">*</span></label>
+        <div class="form-label">ประเภทประกัน <span class="req">*</span></div>
         <div class="type-selector">
-          <div class="type-chip" onclick="selectType('health')" data-type="health"><div class="type-chip-icon">❤️‍🩹</div>สุขภาพ</div>
-          <div class="type-chip" onclick="selectType('accident')" data-type="accident"><div class="type-chip-icon">⚡</div>อุบัติเหตุ</div>
-          <div class="type-chip" onclick="selectType('life')" data-type="life"><div class="type-chip-icon">🌿</div>ชีวิต</div>
-          <div class="type-chip" onclick="selectType('ci')" data-type="ci"><div class="type-chip-icon">🏥</div>CI</div>
-          <div class="type-chip" onclick="selectType('other')" data-type="other"><div class="type-chip-icon">📌</div>อื่นๆ</div>
+          <div class="type-chip" onclick="selType('health')" data-t="health"><div class="tc-icon">❤️‍🩹</div>สุขภาพ</div>
+          <div class="type-chip" onclick="selType('accident')" data-t="accident"><div class="tc-icon">⚡</div>อุบัติเหตุ</div>
+          <div class="type-chip" onclick="selType('life')" data-t="life"><div class="tc-icon">🌿</div>ชีวิต</div>
+          <div class="type-chip" onclick="selType('ci')" data-t="ci"><div class="tc-icon">🏥</div>CI</div>
+          <div class="type-chip" onclick="selType('other')" data-t="other"><div class="tc-icon">📌</div>อื่นๆ</div>
         </div>
         <input type="hidden" id="f-type">
       </div>
-      <div class="form-group">
-        <label class="form-label">สมาชิก <span class="req">*</span></label>
-        <select class="form-input" id="f-member"></select>
-      </div>
+      <div class="form-group"><div class="form-label">สมาชิก <span class="req">*</span></div><select class="form-input" id="f-member"></select></div>
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">บริษัทประกัน <span class="req">*</span></label>
-          <input type="text" class="form-input" id="f-company" placeholder="AIA, เมืองไทย...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">เลขกรมธรรม์</label>
-          <input type="text" class="form-input" id="f-policy-no" placeholder="TH-2024-001" autocorrect="off">
-        </div>
+        <div class="form-group"><div class="form-label">บริษัทประกัน <span class="req">*</span></div><input type="text" class="form-input" id="f-company" placeholder="AIA, เมืองไทย..."></div>
+        <div class="form-group"><div class="form-label">เลขกรมธรรม์</div><input type="text" class="form-input" id="f-polno" placeholder="TH-2024-001" autocorrect="off"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">ชื่อแผน</label>
-        <input type="text" class="form-input" id="f-plan" placeholder="เช่น Health Plus Gold">
+      <div class="form-group"><div class="form-label">ชื่อแผน</div><input type="text" class="form-input" id="f-plan" placeholder="เช่น Health Plus Gold"></div>
+      <hr class="form-divider">
+      <div class="form-sec">📅 ระยะเวลาคุ้มครอง</div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">วันเริ่ม <span class="req">*</span></div><input type="date" class="form-input" id="f-start"></div>
+        <div class="form-group"><div class="form-label">วันหมดอายุ <span class="req">*</span></div><input type="date" class="form-input" id="f-end"></div>
       </div>
       <hr class="form-divider">
-      <div class="form-section-title">📅 ระยะเวลาคุ้มครอง</div>
+      <div class="form-sec">💰 การเงิน</div>
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">วันเริ่มคุ้มครอง <span class="req">*</span></label>
-          <input type="date" class="form-input" id="f-start">
-        </div>
-        <div class="form-group">
-          <label class="form-label">วันหมดอายุ <span class="req">*</span></label>
-          <input type="date" class="form-input" id="f-end">
+        <div class="form-group"><div class="form-label">เบี้ยประกัน/ปี (฿)</div><input type="number" class="form-input" id="f-premium" placeholder="0" inputmode="numeric"></div>
+        <div class="form-group"><div class="form-label">ทุนประกัน (฿)</div><input type="number" class="form-input" id="f-sum" placeholder="0" inputmode="numeric"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">ผู้รับผลประโยชน์</div><input type="text" class="form-input" id="f-bene" placeholder="ภรรยา, ลูก"></div>
+        <div class="form-group"><div class="form-label">ความถี่ชำระ</div>
+          <select class="form-input" id="f-freq"><option value="yearly">รายปี</option><option value="halfyearly">ราย 6 เดือน</option><option value="quarterly">รายไตรมาส</option><option value="monthly">รายเดือน</option></select>
         </div>
       </div>
       <hr class="form-divider">
-      <div class="form-section-title">💰 การเงิน</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">เบี้ยประกัน/ปี (฿)</label>
-          <input type="number" class="form-input" id="f-premium" placeholder="0" inputmode="numeric">
-        </div>
-        <div class="form-group">
-          <label class="form-label">ทุนประกันรวม (฿)</label>
-          <input type="number" class="form-input" id="f-sum" placeholder="0" inputmode="numeric">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">ผู้รับผลประโยชน์</label>
-          <input type="text" class="form-input" id="f-beneficiary" placeholder="ภรรยา, ลูก">
-        </div>
-        <div class="form-group">
-          <label class="form-label">ความถี่ชำระ</label>
-          <select class="form-input" id="f-freq">
-            <option value="yearly">รายปี</option>
-            <option value="halfyearly">ราย 6 เดือน</option>
-            <option value="quarterly">รายไตรมาส</option>
-            <option value="monthly">รายเดือน</option>
-          </select>
-        </div>
+      <div class="form-sec">🩺 ความคุ้มครอง</div>
+      <div class="cov-grid">
+        <label class="cov-item"><input type="checkbox" value="ipd"> 🏥 IPD ผู้ป่วยใน</label>
+        <label class="cov-item"><input type="checkbox" value="opd"> 🩺 OPD ผู้ป่วยนอก</label>
+        <label class="cov-item"><input type="checkbox" value="dental"> 🦷 ทันตกรรม</label>
+        <label class="cov-item"><input type="checkbox" value="vision"> 👁️ สายตา</label>
+        <label class="cov-item"><input type="checkbox" value="maternity"> 🤰 คลอดบุตร</label>
+        <label class="cov-item"><input type="checkbox" value="critical"> 🔴 โรคร้ายแรง</label>
+        <label class="cov-item"><input type="checkbox" value="accident_med"> ⚡ อุบัติเหตุ</label>
+        <label class="cov-item"><input type="checkbox" value="death"> 💐 เสียชีวิต</label>
+        <label class="cov-item"><input type="checkbox" value="disability"> ♿ ทุพพลภาพ</label>
+        <label class="cov-item"><input type="checkbox" value="saving"> 💰 สะสมทรัพย์</label>
+        <label class="cov-item"><input type="checkbox" value="retirement"> 👴 บำนาญ</label>
+        <label class="cov-item"><input type="checkbox" value="other_cov"> 📌 อื่นๆ</label>
       </div>
       <hr class="form-divider">
-      <div class="form-section-title">🩺 ความคุ้มครอง</div>
-      <div class="coverage-grid" id="coverage-grid">
-        <label class="coverage-check"><input type="checkbox" value="ipd"> 🏥 ผู้ป่วยใน IPD</label>
-        <label class="coverage-check"><input type="checkbox" value="opd"> 🩺 ผู้ป่วยนอก OPD</label>
-        <label class="coverage-check"><input type="checkbox" value="dental"> 🦷 ทันตกรรม</label>
-        <label class="coverage-check"><input type="checkbox" value="vision"> 👁️ สายตา</label>
-        <label class="coverage-check"><input type="checkbox" value="maternity"> 🤰 คลอดบุตร</label>
-        <label class="coverage-check"><input type="checkbox" value="critical"> 🔴 โรคร้ายแรง</label>
-        <label class="coverage-check"><input type="checkbox" value="accident_med"> ⚡ อุบัติเหตุ</label>
-        <label class="coverage-check"><input type="checkbox" value="death"> 💐 เสียชีวิต</label>
-        <label class="coverage-check"><input type="checkbox" value="disability"> ♿ ทุพพลภาพ</label>
-        <label class="coverage-check"><input type="checkbox" value="saving"> 💰 สะสมทรัพย์</label>
-        <label class="coverage-check"><input type="checkbox" value="retirement"> 👴 บำนาญ</label>
-        <label class="coverage-check"><input type="checkbox" value="other_cov"> 📌 อื่นๆ</label>
-      </div>
-      <hr class="form-divider">
-      <div class="form-section-title">📎 ไฟล์แนบ → Google Drive</div>
-      <div id="upload-not-auth" class="alert alert-info" style="display:none;margin-bottom:10px">
-        🔐 Login Google ก่อนเพื่ออัพโหลดไฟล์
-      </div>
+      <div class="form-sec">📎 ไฟล์แนบ → Google Drive</div>
+      <div id="upload-auth-warn" class="alert alert-info" style="display:none">🔐 Login Google ก่อนเพื่ออัพโหลดไฟล์</div>
       <div id="upload-wrap">
-        <div class="upload-area" onclick="document.getElementById('file-input').click()"
-          ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-          <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+        <div class="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault()" ondrop="onDrop(event)">
+          <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="onFilePick(event)">
           <div style="font-size:28px">📎</div>
           <div style="font-size:13px;color:var(--g600)">แตะเพื่อเลือกไฟล์</div>
-          <div style="font-size:11px;color:var(--g400)">PDF, JPG, PNG (สูงสุด 20MB)</div>
+          <div style="font-size:11px;color:var(--g400)">PDF, JPG, PNG · สูงสุด 20MB</div>
         </div>
         <div class="file-list" id="file-list"></div>
       </div>
-      <div class="form-group" style="margin-top:14px">
-        <label class="form-label">หมายเหตุ</label>
-        <textarea class="form-input" id="f-notes" placeholder="เงื่อนไขพิเศษ, contact agent..."></textarea>
-      </div>
+      <div class="form-group" style="margin-top:14px"><div class="form-label">หมายเหตุ</div><textarea class="form-input" id="f-notes" placeholder="เงื่อนไขพิเศษ, contact..."></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('policy-modal')">ยกเลิก</button>
-      <button class="btn btn-primary" id="save-btn" onclick="savePolicy()">💾 บันทึกกรมธรรม์</button>
+      <button class="btn btn-primary" id="save-btn" onclick="savePolicy()">💾 บันทึก</button>
     </div>
   </div>
 </div>
 
 <!-- DETAIL MODAL -->
 <div class="modal-overlay" id="detail-modal">
-  <div class="modal" style="max-width:600px">
+  <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">📋 รายละเอียด</div>
-      <button class="modal-close" onclick="closeModal('detail-modal')">✕</button>
-    </div>
-    <div class="modal-body" id="detail-content"></div>
+    <div class="modal-header"><div class="modal-title">📋 รายละเอียด</div><button class="modal-close" onclick="closeModal('detail-modal')">✕</button></div>
+    <div class="modal-body" id="detail-body"></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost btn-sm" onclick="closeModal('detail-modal')">ปิด</button>
-      <button class="btn btn-outline btn-sm" id="detail-edit-btn">✏️ แก้ไข</button>
-      <button class="btn btn-danger btn-sm" id="detail-del-btn">🗑️ ลบ</button>
+      <button class="btn btn-ghost" onclick="closeModal('detail-modal')">ปิด</button>
+      <button class="btn btn-outline" id="det-edit">✏️ แก้ไข</button>
+      <button class="btn btn-danger" id="det-del">🗑️ ลบ</button>
     </div>
   </div>
 </div>
@@ -890,32 +638,16 @@ select.form-input{
 <div class="modal-overlay" id="member-modal">
   <div class="modal" style="max-width:440px">
     <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">👤 เพิ่มสมาชิก</div>
-      <button class="modal-close" onclick="closeModal('member-modal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-title">👤 เพิ่มสมาชิก</div><button class="modal-close" onclick="closeModal('member-modal')">✕</button></div>
     <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">ชื่อ-นามสกุล <span class="req">*</span></label>
-        <input type="text" class="form-input" id="m-name" placeholder="เช่น สมชาย ใจดี">
-      </div>
+      <div class="form-group"><div class="form-label">ชื่อ-นามสกุล <span class="req">*</span></div><input type="text" class="form-input" id="m-name" placeholder="สมชาย ใจดี"></div>
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">ความสัมพันธ์</label>
-          <select class="form-input" id="m-role">
-            <option>ตัวเอง</option><option>คู่สมรส</option><option>ลูก</option>
-            <option>พ่อ</option><option>แม่</option><option>พ่อตา/แม่ยาย</option><option>อื่นๆ</option>
-          </select>
+        <div class="form-group"><div class="form-label">ความสัมพันธ์</div>
+          <select class="form-input" id="m-role"><option>ตัวเอง</option><option>คู่สมรส</option><option>ลูก</option><option>พ่อ</option><option>แม่</option><option>พ่อตา/แม่ยาย</option><option>อื่นๆ</option></select>
         </div>
-        <div class="form-group">
-          <label class="form-label">วันเกิด</label>
-          <input type="date" class="form-input" id="m-dob">
-        </div>
+        <div class="form-group"><div class="form-label">วันเกิด</div><input type="date" class="form-input" id="m-dob"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">สีประจำตัว</label>
-        <input type="color" class="form-input" id="m-color" value="#1a73e8" style="height:48px;cursor:pointer;padding:4px 8px">
-      </div>
+      <div class="form-group"><div class="form-label">สีประจำตัว</div><input type="color" class="form-input" id="m-color" value="#1a73e8" style="height:48px;cursor:pointer;padding:4px 8px"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('member-modal')">ยกเลิก</button>
@@ -924,580 +656,610 @@ select.form-input{
   </div>
 </div>
 
-<div class="toast-container" id="toast-container"></div>
+<div class="toast-wrap" id="toast-wrap"></div>
 
-<!-- Google Identity Services (GIS) — ไม่ block render -->
 <script src="https://accounts.google.com/gsi/client" async></script>
-<script src="https://apis.google.com/js/api.js" async
-  onload="onGapiLoad()" onerror="console.warn('GAPI load failed')"></script>
-
+<script src="https://apis.google.com/js/api.js" async onload="onGapiLoad()"></script>
 <script>
-// ══════════════════════════════════════════════
+// ═══════════════════════════════
 //  CONSTANTS
-// ══════════════════════════════════════════════
-const TYPE_CFG = {
-  health  :{ label:'สุขภาพ',     icon:'❤️‍🩹', color:'#34a853', bg:'#e6f4ea' },
-  accident:{ label:'อุบัติเหตุ', icon:'⚡',   color:'#c77a00', bg:'#fef9e7' },
-  life    :{ label:'ชีวิต',      icon:'🌿',   color:'#9c27b0', bg:'#f3e5f5' },
-  ci      :{ label:'CI',         icon:'🏥',   color:'#ff6d00', bg:'#fff3e0' },
-  other   :{ label:'อื่นๆ',      icon:'📌',   color:'#1a73e8', bg:'#e8f0fe' },
+// ═══════════════════════════════
+const TC={
+  health  :{label:'สุขภาพ',    icon:'❤️‍🩹',color:'#34a853',bg:'#e6f4ea'},
+  accident:{label:'อุบัติเหตุ',icon:'⚡',  color:'#c77a00',bg:'#fef9e7'},
+  life    :{label:'ชีวิต',     icon:'🌿',  color:'#9c27b0',bg:'#f3e5f5'},
+  ci      :{label:'CI',        icon:'🏥',  color:'#ff6d00',bg:'#fff3e0'},
+  other   :{label:'อื่นๆ',     icon:'📌',  color:'#1a73e8',bg:'#e8f0fe'},
 };
-const COV_LBL = {
-  ipd:'ผู้ป่วยใน',opd:'ผู้ป่วยนอก',dental:'ทันตกรรม',vision:'สายตา',
-  maternity:'คลอดบุตร',critical:'โรคร้ายแรง',accident_med:'อุบัติเหตุ',
-  death:'เสียชีวิต',disability:'ทุพพลภาพ',saving:'สะสมทรัพย์',
-  retirement:'บำนาญ',other_cov:'อื่นๆ',
-};
-const PALETTE=['#1a73e8','#e91e63','#ff9800','#9c27b0','#00acc1','#34a853','#f06292','#8d6e63'];
-const SCOPES=[
-  'https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/drive.file',
-  'profile','email',
-].join(' ');
+const CL={ipd:'IPD ผู้ป่วยใน',opd:'OPD ผู้ป่วยนอก',dental:'ทันตกรรม',
+  vision:'สายตา',maternity:'คลอดบุตร',critical:'โรคร้ายแรง',
+  accident_med:'อุบัติเหตุ',death:'เสียชีวิต',disability:'ทุพพลภาพ',
+  saving:'สะสมทรัพย์',retirement:'บำนาญ',other_cov:'อื่นๆ'};
+const PAL=['#1a73e8','#e91e63','#ff9800','#9c27b0','#00acc1','#34a853','#795548'];
+const SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file profile email';
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════
 //  STATE
-// ══════════════════════════════════════════════
-let policies=[], members=[], editingId=null, selectedType='';
-let activeFilter='all', syncTimer=null;
-let pendingFiles=[];
+// ═══════════════════════════════
+let policies=[], members=[], editId=null, selType='', activeFilter='all';
+let pendingFiles=[], syncTimer=null;
+let token=null, user=null, gisReady=false;
+let cfg={clientId:'',sheetId:'',sheetName:'Policies',membersSheetName:'Members',syncInterval:15,driveFolderId:''};
 
-// Google auth state
-let gapiReady=false, gisReady=false, tokenClient=null, accessToken=null, currentUser=null;
+// ═══════════════════════════════
+//  LOADING SCREEN
+// ═══════════════════════════════
+function setLoading(pct,msg){
+  document.getElementById('loading-fill').style.width=pct+'%';
+  document.getElementById('loading-sub').textContent=msg;
+}
+function hideLoading(){
+  setTimeout(()=>{document.getElementById('loading-screen').classList.add('hide');
+    setTimeout(()=>document.getElementById('loading-screen').style.display='none',400);},300);
+}
 
-let cfg={clientId:'',sheetId:'',sheetName:'Policies',syncInterval:15,driveFolderId:''};
-
-// ══════════════════════════════════════════════
-//  BOOT
-// ══════════════════════════════════════════════
-function init(){
-  loadLocal();
-  document.getElementById('current-origin').textContent=location.origin;
+// ═══════════════════════════════
+//  BOOT — ลำดับสำคัญมาก
+// ═══════════════════════════════
+async function boot(){
+  setLoading(10,'อ่านการตั้งค่า...');
+  loadCfg();
+  document.getElementById('curr-origin').textContent=location.origin;
   if(cfg.clientId) document.getElementById('client-id-input').value=cfg.clientId;
   if(cfg.sheetId)  document.getElementById('sheet-id').value=cfg.sheetId;
-  document.getElementById('sheet-name').value=cfg.sheetName||'Policies';
+  document.getElementById('sheet-name').value=cfg.sheetName;
+  document.getElementById('members-sheet-name').value=cfg.membersSheetName||'Members';
   document.getElementById('drive-folder-id').value=cfg.driveFolderId||'';
-  if(!members.length){ members=[{id:uid(),name:'ฉัน (ตัวเอง)',role:'ตัวเอง',color:'#1a73e8',dob:''}]; saveLocal(); }
-  populateMemberDropdowns();
+
+  setLoading(25,'โหลดข้อมูลในเครื่อง...');
+  loadLocalFallback(); // โหลด cache ก่อนแสดงทันที
+
+  setLoading(40,'กำลังเชื่อมต่อ Google...');
+  // ลอง restore token จาก sessionStorage
+  const saved=sessionStorage.getItem('gt');
+  if(saved){
+    token=saved;
+    const ok=await verifyToken();
+    if(ok){
+      setLoading(65,'โหลดข้อมูลจาก Google Sheets...');
+      await fetchProfile();
+      if(cfg.sheetId) await pullFromSheet(true); // โหลดจาก Sheet ทันที
+    } else {
+      token=null; sessionStorage.removeItem('gt');
+    }
+  }
+
+  setLoading(90,'เตรียมหน้าจอ...');
+  if(!members.length){
+    members=[{id:uid(),name:'ฉัน (ตัวเอง)',role:'ตัวเอง',color:'#1a73e8',dob:''}];
+    saveLocalFallback();
+  }
+  populateMemberSel();
   renderAll(); checkAlerts();
-  updateAuthUI();
-  // Try silent token restore from sessionStorage
-  const savedToken=sessionStorage.getItem('gtoken');
-  if(savedToken){ accessToken=savedToken; tryRestoreUser(); }
+  updateSyncBar(); updateAuthUI();
+  setLoading(100,'พร้อมใช้งาน!');
+  hideLoading();
+
+  if(token && cfg.sheetId) setupAutoSync();
 }
 
-function loadLocal(){
+// ═══════════════════════════════
+//  LOCAL STORAGE (Cache เท่านั้น)
+//  ใช้เป็น offline cache — แหล่งข้อมูลจริงคือ Google Sheets
+// ═══════════════════════════════
+function loadLocalFallback(){
   try{
-    policies=JSON.parse(localStorage.getItem('ins_policies')||'[]');
-    members=JSON.parse(localStorage.getItem('ins_members')||'[]');
-    cfg=Object.assign({clientId:'',sheetId:'',sheetName:'Policies',syncInterval:15,driveFolderId:''},
-      JSON.parse(localStorage.getItem('ins_cfg')||'{}'));
+    policies=JSON.parse(localStorage.getItem('ins_p')||'[]');
+    members=JSON.parse(localStorage.getItem('ins_m')||'[]');
   }catch(e){policies=[];members=[];}
 }
-function saveLocal(){
-  localStorage.setItem('ins_policies',JSON.stringify(policies));
-  localStorage.setItem('ins_members',JSON.stringify(members));
-  localStorage.setItem('ins_cfg',JSON.stringify(cfg));
+function saveLocalFallback(){
+  localStorage.setItem('ins_p',JSON.stringify(policies));
+  localStorage.setItem('ins_m',JSON.stringify(members));
 }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+function loadCfg(){
+  try{ cfg=Object.assign({clientId:'',sheetId:'',sheetName:'Policies',membersSheetName:'Members',syncInterval:15,driveFolderId:''},
+    JSON.parse(localStorage.getItem('ins_cfg')||'{}')); }
+  catch(e){}
+}
+function saveCfg(){ localStorage.setItem('ins_cfg',JSON.stringify(cfg)); }
 
-// ══════════════════════════════════════════════
-//  GOOGLE APIS — iOS-compatible approach
-//  Uses fetch() + REST API directly instead of
-//  gapi.client (which fails on Safari/iOS)
-// ══════════════════════════════════════════════
+// ═══════════════════════════════
+//  GOOGLE AUTH (iOS-safe: fetch REST only)
+// ═══════════════════════════════
 function onGapiLoad(){
-  gapi.load('client',async()=>{
-    try{
-      await gapi.client.init({});
-      gapiReady=true;
-    }catch(e){ console.warn('gapi init warn:',e); gapiReady=true; }
-    tryInitGIS();
+  gapi.load('client',()=>{
+    gapi.client.init({}).then(()=>{}).catch(()=>{});
   });
 }
 
-function tryInitGIS(){
-  if(typeof google==='undefined'||!google.accounts){ setTimeout(tryInitGIS,500); return; }
-  if(!cfg.clientId){ gisReady=true; return; }
-  tokenClient=google.accounts.oauth2.initTokenClient({
-    client_id:cfg.clientId, scope:SCOPES,
-    callback:handleTokenResponse,
-    error_callback:(e)=>{ showToast('Login ผิดพลาด: '+(e.type||e),'error'); },
-  });
-  gisReady=true;
-}
+window.addEventListener('load',()=>{
+  if(typeof google!=='undefined'&&google.accounts) initGIS();
+  else{
+    let t=0;
+    const iv=setInterval(()=>{
+      if(typeof google!=='undefined'&&google.accounts){clearInterval(iv);initGIS();}
+      if(++t>30) clearInterval(iv);
+    },300);
+  }
+});
 
-function handleTokenResponse(resp){
-  if(resp.error){ showToast('Login ไม่สำเร็จ: '+resp.error,'error'); return; }
-  accessToken=resp.access_token;
-  sessionStorage.setItem('gtoken',accessToken);
-  fetchUserProfile();
-}
-
-async function fetchUserProfile(){
+function initGIS(){
+  if(!cfg.clientId){gisReady=true;return;}
   try{
-    const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',
-      {headers:{Authorization:'Bearer '+accessToken}});
-    if(!r.ok){ accessToken=null; sessionStorage.removeItem('gtoken'); updateAuthUI(); return; }
-    currentUser=await r.json();
-    updateAuthUI();
-    showToast('สวัสดี '+currentUser.name+' 👋','success');
-    if(!cfg.driveFolderId) initDriveFolder();
+    window._tc=google.accounts.oauth2.initTokenClient({
+      client_id:cfg.clientId,scope:SCOPES,
+      callback:onToken,
+      error_callback:(e)=>toast('Login ผิดพลาด: '+(e.type||e),'error'),
+    });
+    gisReady=true;
+  }catch(e){console.warn('GIS init:',e);}
+}
+
+function onToken(resp){
+  if(resp.error){toast('Login ไม่สำเร็จ: '+resp.error,'error');return;}
+  token=resp.access_token;
+  sessionStorage.setItem('gt',token);
+  fetchProfile().then(()=>{
+    if(cfg.sheetId) pullFromSheet(); // โหลดข้อมูลจาก Sheet หลัง login
+    else toast('Login สำเร็จ! กรุณาตั้งค่า Spreadsheet ID','warn');
     setupAutoSync();
-  }catch(e){ console.warn('profile fetch failed',e); }
+  });
 }
 
-async function tryRestoreUser(){
-  // Verify token is still valid
+async function verifyToken(){
   try{
-    const r=await fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token='+accessToken);
-    if(!r.ok){ accessToken=null; sessionStorage.removeItem('gtoken'); return; }
-    fetchUserProfile();
-  }catch(e){ accessToken=null; sessionStorage.removeItem('gtoken'); }
+    const r=await fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token='+token);
+    return r.ok;
+  }catch(e){return false;}
 }
 
-function handleSignIn(){
-  if(!cfg.clientId){
-    showToast('กรุณาตั้งค่า Client ID ก่อน → ⚙️ ตั้งค่า','warn');
-    navigate('settings'); return;
-  }
-  if(!gisReady||!tokenClient){ tryInitGIS(); setTimeout(handleSignIn,800); return; }
-  // For iOS Safari: must be triggered directly from user gesture
-  tokenClient.requestAccessToken({prompt: accessToken?'':'consent'});
+async function fetchProfile(){
+  try{
+    const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+token}});
+    if(!r.ok){token=null;sessionStorage.removeItem('gt');updateAuthUI();return;}
+    user=await r.json();
+    updateAuthUI(); updateSyncBar();
+  }catch(e){console.warn(e);}
 }
 
-function handleSignOut(){
-  if(accessToken && typeof google!=='undefined'){
-    google.accounts.oauth2.revoke(accessToken,()=>{});
-  }
-  accessToken=null; currentUser=null;
-  sessionStorage.removeItem('gtoken');
-  if(syncTimer){ clearInterval(syncTimer); syncTimer=null; }
-  updateAuthUI();
-  showToast('ออกจากระบบแล้ว','warn');
+function signIn(){
+  if(!cfg.clientId){toast('กรุณาตั้งค่า Client ID ก่อน → ⚙️ ตั้งค่า','warn');goTo('settings');return;}
+  if(!gisReady||!window._tc){initGIS();setTimeout(signIn,800);return;}
+  window._tc.requestAccessToken({prompt:token?'':'consent'});
 }
 
-function updateAuthUI(){
-  const isIn=!!currentUser;
-  // Sidebar
-  const sa=document.getElementById('sidebar-auth-area');
-  if(isIn){
-    sa.innerHTML=`<div class="gauth-btn signed-in">
-      ${currentUser.picture?`<img class="gauth-avatar" src="${currentUser.picture}">`:'✅'}
-      <div class="gauth-info"><div class="gauth-name">${currentUser.name}</div><div class="gauth-email">${currentUser.email}</div></div>
-      <button onclick="handleSignOut()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:4px;min-height:auto" title="ออก">✕</button>
-    </div>`;
-  } else {
-    sa.innerHTML=`<button class="gauth-btn" onclick="handleSignIn()">
-      <span style="font-size:16px">🔐</span>
-      <div class="gauth-info"><div class="gauth-name">เข้าสู่ระบบ Google</div><div class="gauth-email">Sheets & Drive</div></div>
-    </button>`;
-  }
-  // Mobile auth card on dashboard
-  const ma=document.getElementById('mobile-auth-area');
-  if(ma){
-    if(isIn){
-      ma.innerHTML=`<div class="mobile-auth-signed">
-        ${currentUser.picture?`<img class="gauth-avatar" src="${currentUser.picture}" style="width:32px;height:32px">`:'✅'}
-        <div><div style="font-size:13px;font-weight:600;color:var(--success)">${currentUser.name}</div><div style="font-size:11px;color:var(--g500)">${currentUser.email}</div></div>
-        <button onclick="syncToSheet()" style="margin-left:auto;background:none;border:1.5px solid var(--success);color:var(--success);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;min-height:auto">🔄 Sync</button>
-      </div>`;
-    } else {
-      ma.innerHTML=`<div class="mobile-auth-card">
-        <div class="mobile-auth-card-title">🔐 เชื่อมต่อ Google</div>
-        <div class="mobile-auth-card-desc">Login เพื่อ Sync ข้อมูลขึ้น Google Sheets และอัพโหลดไฟล์ไปยัง Drive</div>
-        <button class="mobile-auth-card-btn" onclick="handleSignIn()">🔐 เข้าสู่ระบบด้วย Google</button>
-      </div>`;
-    }
-  }
-  // Settings page
-  const ss=document.getElementById('settings-auth');
-  if(ss){
-    if(isIn){
-      ss.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:10px 0">
-        ${currentUser.picture?`<img src="${currentUser.picture}" style="width:40px;height:40px;border-radius:50%">`:''}
-        <div><div style="font-size:14px;font-weight:700">${currentUser.name}</div><div style="font-size:12px;color:var(--g500)">${currentUser.email}</div></div>
-        <button onclick="handleSignOut()" class="btn btn-ghost btn-sm" style="margin-left:auto">ออก</button>
-      </div>`;
-    } else {
-      ss.innerHTML=`<div style="padding:8px 0 14px"><div style="font-size:13px;color:var(--g600);margin-bottom:10px">ยังไม่ได้ Login — ข้อมูลจะเก็บแค่ใน Browser เท่านั้น</div>
-        <button class="btn btn-primary" onclick="handleSignIn()" style="width:100%">🔐 เข้าสู่ระบบด้วย Google</button></div>`;
-    }
-  }
-  // Sheet sync status
-  const sss=document.getElementById('sheet-sync-status');
-  if(sss){
-    if(isIn && cfg.sheetId){
-      sss.innerHTML=`<div class="sync-dot sync-active"></div><span>เชื่อมต่อแล้ว: ${cfg.sheetName}</span>`;
-    } else if(isIn){
-      sss.innerHTML=`<div class="sync-dot" style="background:var(--warning)"></div><span>Login แล้ว — ยังไม่ได้ตั้งค่า Sheet ID</span>`;
-    } else {
-      sss.innerHTML=`<div class="sync-dot sync-inactive"></div><span>ยังไม่ได้ Login Google</span>`;
-    }
-  }
-  // Upload area in modal
-  const ua=document.getElementById('upload-not-auth');
-  const uw=document.getElementById('upload-wrap');
-  if(ua && uw){ ua.style.display=isIn?'none':'flex'; uw.style.display=isIn?'block':'none'; }
-  // Drive folder
-  if(isIn && cfg.driveFolderId) renderDriveFolderCard();
+function signOut(){
+  if(token&&typeof google!=='undefined') google.accounts.oauth2.revoke(token,()=>{});
+  token=null;user=null;
+  sessionStorage.removeItem('gt');
+  if(syncTimer){clearInterval(syncTimer);syncTimer=null;}
+  updateAuthUI(); updateSyncBar();
+  toast('ออกจากระบบแล้ว','warn');
 }
 
-// ══════════════════════════════════════════════
-//  GOOGLE SHEETS — pure fetch (works on iOS)
-// ══════════════════════════════════════════════
-async function sheetsRequest(method, path, body=null){
-  if(!accessToken) throw new Error('NOT_SIGNED_IN');
+// ═══════════════════════════════
+//  SYNC BAR
+// ═══════════════════════════════
+function updateSyncBar(){
+  const dot=document.getElementById('sync-dot');
+  const txt=document.getElementById('sync-text');
+  const btn=document.getElementById('sync-action-btn');
+  dot.className='sync-bar-dot';
+  if(!token){ dot.classList.add('dot-offline'); txt.textContent='ยังไม่ได้ Login Google'; btn.textContent='Login'; }
+  else if(!cfg.sheetId){ dot.classList.add('dot-offline'); txt.textContent='Login แล้ว — ยังไม่ได้ตั้งค่า Sheet'; btn.textContent='ตั้งค่า'; }
+  else{ dot.classList.add('dot-synced'); txt.textContent=`🔄 Sheet: ${cfg.sheetName} · ข้อมูลเดียวกันทุกเครื่อง`; btn.textContent='Sync'; }
+}
+function setSyncing(on,msg){
+  const dot=document.getElementById('sync-dot');
+  const txt=document.getElementById('sync-text');
+  dot.className='sync-bar-dot '+(on?'dot-syncing':'dot-synced');
+  txt.textContent=on?(msg||'กำลัง Sync...'):`🔄 Sheet: ${cfg.sheetName}`;
+}
+function handleSyncBarAction(){
+  if(!token) signIn();
+  else if(!cfg.sheetId) goTo('settings');
+  else pullFromSheet();
+}
+
+// ═══════════════════════════════
+//  GOOGLE SHEETS — fetch REST (iOS-safe)
+// ═══════════════════════════════
+async function gSheets(method,path,body=null){
+  if(!token) throw new Error('NOT_SIGNED_IN');
   const url=`https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}${path}`;
-  const opts={method, headers:{Authorization:'Bearer '+accessToken,'Content-Type':'application/json'}};
+  const opts={method,headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'}};
   if(body) opts.body=JSON.stringify(body);
   const r=await fetch(url,opts);
-  if(r.status===401){ accessToken=null; sessionStorage.removeItem('gtoken'); updateAuthUI(); throw new Error('TOKEN_EXPIRED'); }
-  if(!r.ok){ const e=await r.json(); throw new Error(e.error?.message||'Sheets error'); }
+  if(r.status===401){token=null;sessionStorage.removeItem('gt');user=null;updateAuthUI();updateSyncBar();throw new Error('TOKEN_EXPIRED');}
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'Sheets error '+r.status);}
   return r.json();
 }
 
-async function syncToSheet(silent=false){
-  if(!accessToken){if(!silent) showToast('กรุณา Login Google ก่อน','warn'); return;}
-  if(!cfg.sheetId){if(!silent) showToast('กรุณาตั้งค่า Spreadsheet ID','warn'); return;}
-  if(!silent) showSyncLoader(true);
-
-  const H=['id','สมาชิก','ประเภท','บริษัทประกัน','เลขกรมธรรม์','ชื่อแผน',
-    'วันเริ่ม','วันหมดอายุ','เบี้ย/ปี','ทุนประกัน','ความคุ้มครอง',
-    'ผู้รับผลประโยชน์','ไฟล์ Drive','หมายเหตุ','อัพเดทล่าสุด'];
-  const rows=[H,...policies.map(p=>[
-    p.id, getMember(p.member).name,(TYPE_CFG[p.type]||TYPE_CFG.other).label,
-    p.company||'',p.policy_no||'',p.plan_name||'',
-    p.start_date||'',p.end_date||'',p.premium||'',p.sum_insured||'',
-    (p.coverage||[]).map(c=>COV_LBL[c]||c).join(', '),
-    p.beneficiary||'',
-    (p.driveFiles||[]).map(f=>f.webViewLink||f.name).join(', '),
-    p.notes||'',p.updated_at||'',
-  ])];
-
+// ── PULL: Sheet → App (อ่านข้อมูลจาก Sheet มาใส่ App)
+async function pullFromSheet(silent=false){
+  if(!token){if(!silent) toast('กรุณา Login ก่อน','warn');return;}
+  if(!cfg.sheetId){if(!silent) toast('กรุณาตั้งค่า Spreadsheet ID','warn');return;}
+  if(!silent) setSyncing(true,'กำลังโหลดจาก Sheet...');
   try{
-    // Clear then write
-    await sheetsRequest('POST',`/values/${encodeURIComponent(cfg.sheetName+'!A:Z')}:clear`);
-    await sheetsRequest('PUT',`/values/${encodeURIComponent(cfg.sheetName+'!A1')}?valueInputOption=RAW`,{values:rows});
-    if(!silent){ showSyncLoader(false); showToast('Sync ขึ้น Sheets สำเร็จ ✅','success'); }
-    else showSyncLoader(false);
-    // Update status badge
-    updateAuthUI();
+    // Load Policies
+    const pd=await gSheets('GET',`/values/${encodeURIComponent(cfg.sheetName)}?majorDimension=ROWS`);
+    if(pd.values&&pd.values.length>1){
+      const [h,...rows]=pd.values;
+      const idx=k=>h.indexOf(k);
+      policies=rows.filter(r=>r[0]).map(r=>({
+        id:r[idx('id')]||uid(),
+        member:r[idx('member_id')]||'',
+        type:r[idx('type')]||'other',
+        company:r[idx('company')]||'',
+        policy_no:r[idx('policy_no')]||'',
+        plan_name:r[idx('plan_name')]||'',
+        start_date:r[idx('start_date')]||'',
+        end_date:r[idx('end_date')]||'',
+        premium:r[idx('premium')]||0,
+        sum_insured:r[idx('sum_insured')]||0,
+        payment_freq:r[idx('payment_freq')]||'yearly',
+        beneficiary:r[idx('beneficiary')]||'',
+        coverage:(r[idx('coverage')]||'').split(',').map(s=>s.trim()).filter(Boolean),
+        driveFiles:(() => { try{return JSON.parse(r[idx('drive_files')]||'[]');}catch(e){return [];} })(),
+        notes:r[idx('notes')]||'',
+        created_at:r[idx('created_at')]||'',
+        updated_at:r[idx('updated_at')]||'',
+      }));
+    }
+    // Load Members
+    const msn=cfg.membersSheetName||'Members';
+    try{
+      const md=await gSheets('GET',`/values/${encodeURIComponent(msn)}?majorDimension=ROWS`);
+      if(md.values&&md.values.length>1){
+        const [h,...rows]=md.values;
+        const idx=k=>h.indexOf(k);
+        members=rows.filter(r=>r[0]).map(r=>({
+          id:r[idx('id')]||uid(),
+          name:r[idx('name')]||'',
+          role:r[idx('role')]||'',
+          dob:r[idx('dob')]||'',
+          color:r[idx('color')]||'#1a73e8',
+          driveFolderId:r[idx('drive_folder_id')]||'',
+        }));
+      }
+    }catch(e){ /* Members sheet อาจยังไม่มี */ }
+
+    saveLocalFallback();
+    if(!members.length) members=[{id:uid(),name:'ฉัน (ตัวเอง)',role:'ตัวเอง',color:'#1a73e8',dob:''}];
+    populateMemberSel();
+    renderAll(); checkAlerts();
+    if(!silent){ setSyncing(false); toast('โหลดข้อมูลจาก Sheet สำเร็จ ✅','success'); }
+    else setSyncing(false);
   }catch(e){
-    showSyncLoader(false);
-    if(!silent) showToast('Sync ไม่สำเร็จ: '+e.message,'error');
-    if(e.message==='TOKEN_EXPIRED') showToast('Session หมดอายุ — กรุณา Login ใหม่','warn');
+    setSyncing(false);
+    if(e.message==='TOKEN_EXPIRED'){toast('Session หมดอายุ — กรุณา Login ใหม่','warn');updateSyncBar();return;}
+    if(!silent) toast('โหลดไม่สำเร็จ: '+e.message,'error');
+    else console.warn('pull failed:',e.message);
   }
 }
 
-async function importFromSheet(){
-  if(!accessToken){showToast('กรุณา Login Google ก่อน','warn');return;}
-  if(!cfg.sheetId){showToast('กรุณาตั้งค่า Spreadsheet ID','warn');return;}
-  showToast('กำลัง Import...','warn'); showSyncLoader(true);
+// ── PUSH: App → Sheet (เขียนข้อมูลขึ้น Sheet)
+async function pushToSheet(silent=false){
+  if(!token){if(!silent) toast('กรุณา Login ก่อน','warn');return;}
+  if(!cfg.sheetId){if(!silent) toast('กรุณาตั้งค่า Spreadsheet ID','warn');return;}
+  if(!silent) setSyncing(true,'กำลังบันทึกขึ้น Sheet...');
+
+  const PH=['id','member_id','member_name','type','company','policy_no','plan_name',
+    'start_date','end_date','premium','sum_insured','payment_freq','beneficiary',
+    'coverage','drive_files','notes','created_at','updated_at'];
+  const pRows=[PH,...policies.map(p=>[
+    p.id, p.member, getMem(p.member).name,
+    p.type, p.company||'', p.policy_no||'', p.plan_name||'',
+    p.start_date||'', p.end_date||'', p.premium||0, p.sum_insured||0,
+    p.payment_freq||'yearly', p.beneficiary||'',
+    (p.coverage||[]).join(','),
+    JSON.stringify(p.driveFiles||[]),
+    p.notes||'', p.created_at||'', p.updated_at||new Date().toISOString(),
+  ])];
+
+  const MH=['id','name','role','dob','color','drive_folder_id'];
+  const mRows=[MH,...members.map(m=>[m.id,m.name,m.role||'',m.dob||'',m.color||'#1a73e8',m.driveFolderId||''])];
+  const msn=cfg.membersSheetName||'Members';
+
   try{
-    const d=await sheetsRequest('GET',`/values/${encodeURIComponent(cfg.sheetName)}?majorDimension=ROWS`);
-    showSyncLoader(false);
-    const [hdrs,...rows]=d.values||[];
-    if(!hdrs){showToast('ไม่พบข้อมูลใน Sheet','warn');return;}
-    showToast(`Import สำเร็จ ${rows.length} แถว ✅`,'success');
-  }catch(e){showSyncLoader(false);showToast('Import ไม่สำเร็จ: '+e.message,'error');}
+    await gSheets('POST',`/values/${encodeURIComponent(cfg.sheetName+'!A:Z')}:clear`);
+    await gSheets('PUT',`/values/${encodeURIComponent(cfg.sheetName+'!A1')}?valueInputOption=RAW`,{values:pRows});
+    // Ensure Members sheet exists — try write, ignore error if sheet doesn't exist
+    try{
+      await gSheets('POST',`/values/${encodeURIComponent(msn+'!A:Z')}:clear`);
+      await gSheets('PUT',`/values/${encodeURIComponent(msn+'!A1')}?valueInputOption=RAW`,{values:mRows});
+    }catch(me){ console.warn('Members sheet write failed (may not exist yet):',me.message); }
+    if(!silent){ setSyncing(false); toast('บันทึกขึ้น Sheet สำเร็จ ✅','success'); }
+    else setSyncing(false);
+  }catch(e){
+    setSyncing(false);
+    if(e.message==='TOKEN_EXPIRED'){toast('Session หมดอายุ — กรุณา Login ใหม่','warn');return;}
+    if(!silent) toast('บันทึกไม่สำเร็จ: '+e.message,'error');
+  }
 }
 
-// ══════════════════════════════════════════════
-//  GOOGLE DRIVE — pure fetch (works on iOS)
-// ══════════════════════════════════════════════
-async function driveRequest(method,url,body=null,isUpload=false){
-  if(!accessToken) throw new Error('NOT_SIGNED_IN');
-  const opts={method,headers:{Authorization:'Bearer '+accessToken}};
-  if(body && !isUpload){ opts.headers['Content-Type']='application/json'; opts.body=JSON.stringify(body); }
-  if(body && isUpload){ opts.body=body; } // FormData
+function setupAutoSync(){
+  if(syncTimer) clearInterval(syncTimer);
+  if(token&&cfg.sheetId&&cfg.syncInterval>0)
+    syncTimer=setInterval(()=>pullFromSheet(true),cfg.syncInterval*60000);
+}
+
+// ═══════════════════════════════
+//  GOOGLE DRIVE — fetch REST
+// ═══════════════════════════════
+async function gDrive(method,url,body=null,isForm=false){
+  if(!token) throw new Error('NOT_SIGNED_IN');
+  const opts={method,headers:{Authorization:'Bearer '+token}};
+  if(body&&!isForm){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+  if(body&&isForm) opts.body=body;
   const r=await fetch(url,opts);
-  if(r.status===401){ accessToken=null; sessionStorage.removeItem('gtoken'); updateAuthUI(); throw new Error('TOKEN_EXPIRED'); }
-  if(!r.ok){ let e; try{e=await r.json();}catch(x){e={error:{message:r.statusText}};} throw new Error(e.error?.message||'Drive error'); }
+  if(r.status===401){token=null;sessionStorage.removeItem('gt');user=null;updateAuthUI();throw new Error('TOKEN_EXPIRED');}
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'Drive error');}
   return r.json();
 }
-
 async function initDriveFolder(){
-  if(!accessToken){showToast('กรุณา Login Google ก่อน','warn');return;}
+  if(!token){toast('กรุณา Login ก่อน','warn');return;}
   const inputId=document.getElementById('drive-folder-id').value.trim();
   if(inputId){
     try{
-      const d=await driveRequest('GET',`https://www.googleapis.com/drive/v3/files/${inputId}?fields=id,name,webViewLink`);
-      cfg.driveFolderId=inputId; saveLocal();
-      showToast(`เชื่อมต่อ "${d.name}" สำเร็จ ✅`,'success');
-      renderDriveFolderCard(d);
-    }catch(e){showToast('ไม่พบ Folder: '+e.message,'error');}
+      const d=await gDrive('GET',`https://www.googleapis.com/drive/v3/files/${inputId}?fields=id,name,webViewLink`);
+      cfg.driveFolderId=inputId;saveCfg();
+      toast(`เชื่อมต่อ "${d.name}" สำเร็จ ✅`,'success');renderDriveCard(d);
+    }catch(e){toast('ไม่พบ Folder: '+e.message,'error');}
     return;
   }
-  showToast('กำลังสร้าง Folder...','warn');
+  toast('กำลังสร้าง Folder Family Insurance...','warn');
   try{
-    const d=await driveRequest('POST','https://www.googleapis.com/drive/v3/files?fields=id,name,webViewLink',
+    const d=await gDrive('POST','https://www.googleapis.com/drive/v3/files?fields=id,name,webViewLink',
       {name:'Family Insurance',mimeType:'application/vnd.google-apps.folder'});
-    cfg.driveFolderId=d.id;
-    document.getElementById('drive-folder-id').value=d.id;
-    saveLocal();
-    showToast('สร้าง Folder "Family Insurance" เรียบร้อย ✅','success');
-    renderDriveFolderCard(d);
-  }catch(e){showToast('สร้าง Folder ไม่สำเร็จ: '+e.message,'error');}
+    cfg.driveFolderId=d.id;document.getElementById('drive-folder-id').value=d.id;saveCfg();
+    toast('สร้าง Folder เรียบร้อย ✅','success');renderDriveCard(d);
+  }catch(e){toast('สร้างไม่สำเร็จ: '+e.message,'error');}
 }
-
-function renderDriveFolderCard(folder){
-  const el=document.getElementById('drive-folder-display'); if(!el) return;
-  const name=folder?.name||'Family Insurance';
-  const link=folder?.webViewLink||`https://drive.google.com/drive/folders/${cfg.driveFolderId}`;
-  el.innerHTML=`<a href="${link}" target="_blank" class="drive-folder-card" style="text-decoration:none;display:flex;align-items:center;gap:12px">
-    <span style="font-size:28px">📁</span>
-    <div><div style="font-size:14px;font-weight:700">${name}</div><div style="font-size:12px;opacity:.85;margin-top:2px">แตะเพื่อเปิดใน Google Drive →</div></div>
-  </a>`;
+function renderDriveCard(f){
+  const el=document.getElementById('drive-card-area');if(!el) return;
+  el.innerHTML=`<a href="${f?.webViewLink||'https://drive.google.com'}" target="_blank" class="drive-folder-card"><span style="font-size:26px">📁</span><div><div style="font-weight:700">${f?.name||'Family Insurance'}</div><div style="font-size:12px;opacity:.8">แตะเพื่อเปิดใน Google Drive →</div></div></a>`;
 }
-
 async function getOrCreateMemberFolder(memberId){
-  const mem=getMember(memberId);
+  const mem=getMem(memberId);
   if(mem.driveFolderId) return mem.driveFolderId;
-  const d=await driveRequest('POST','https://www.googleapis.com/drive/v3/files?fields=id',
+  const d=await gDrive('POST','https://www.googleapis.com/drive/v3/files?fields=id',
     {name:mem.name,mimeType:'application/vnd.google-apps.folder',parents:[cfg.driveFolderId]});
-  const idx=members.findIndex(m=>m.id===memberId);
-  if(idx!==-1){members[idx].driveFolderId=d.id; saveLocal();}
+  const i=members.findIndex(m=>m.id===memberId);
+  if(i!==-1){members[i].driveFolderId=d.id;}
   return d.id;
 }
-
-async function uploadFileToDrive(fileObj,parentId,i){
-  pendingFiles[i].status='uploading'; renderFileList();
+async function uploadFile(fileObj,parentId,i){
+  pendingFiles[i].status='uploading';renderFileList();
   const meta={name:fileObj.name,parents:[parentId]};
   const form=new FormData();
   form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
   form.append('file',fileObj);
   try{
-    const d=await driveRequest('POST',
-      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink',
-      form,true);
-    pendingFiles[i].status='done';
-    pendingFiles[i].driveId=d.id;
-    pendingFiles[i].webViewLink=d.webViewLink;
-    renderFileList();
-    return {id:d.id,name:d.name,webViewLink:d.webViewLink};
-  }catch(e){
-    pendingFiles[i].status='error'; renderFileList();
-    return null;
+    const d=await gDrive('POST','https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink',form,true);
+    pendingFiles[i].status='done';pendingFiles[i].webViewLink=d.webViewLink;renderFileList();
+    return{id:d.id,name:d.name,webViewLink:d.webViewLink};
+  }catch(e){pendingFiles[i].status='error';renderFileList();return null;}
+}
+
+// ═══════════════════════════════
+//  AUTH UI
+// ═══════════════════════════════
+function updateAuthUI(){
+  const isIn=!!user;
+  const sideHtml=isIn
+    ?`<div class="gauth-btn signed-in" style="cursor:default">
+        ${user.picture?`<img src="${user.picture}" style="width:24px;height:24px;border-radius:50%">`:'✅'}
+        <div style="flex:1;overflow:hidden"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.name}</div><div style="font-size:10px;color:var(--g500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.email}</div></div>
+        <button onclick="signOut()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:4px;color:var(--g500)">✕</button>
+      </div>`
+    :`<button class="btn btn-primary" onclick="signIn()" style="width:100%;font-size:12px">🔐 Login Google</button>`;
+  document.getElementById('side-auth').innerHTML=sideHtml;
+
+  const dashHtml=isIn
+    ?`<div class="auth-signed-bar">
+        ${user.picture?`<img src="${user.picture}" style="width:30px;height:30px;border-radius:50%">`:''}
+        <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--success)">${user.name}</div><div style="font-size:11px;color:var(--g500)">${user.email}</div></div>
+        <button onclick="pullFromSheet()" style="background:none;border:1.5px solid var(--success);color:var(--success);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;min-height:auto">🔄 Sync</button>
+      </div>`
+    :`<div class="auth-card">
+        <div class="auth-card-title">🔐 เชื่อมต่อ Google เพื่อ Sync ทุกเครื่อง</div>
+        <div class="auth-card-desc">ข้อมูลบน iPhone จะเหมือนกับ PC / iPad ทันทีที่ Login และตั้งค่า Google Sheet</div>
+        <button class="auth-card-btn" onclick="signIn()">🔐 เข้าสู่ระบบด้วย Google</button>
+      </div>`;
+  const da=document.getElementById('dash-auth-area');
+  if(da) da.innerHTML=dashHtml;
+
+  const sa=document.getElementById('settings-auth');
+  if(sa){
+    if(isIn){
+      sa.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:4px 0 12px">
+        ${user.picture?`<img src="${user.picture}" style="width:40px;height:40px;border-radius:50%">`:''}
+        <div><div style="font-weight:700;font-size:14px">${user.name}</div><div style="font-size:12px;color:var(--g500)">${user.email}</div></div>
+        <button onclick="signOut()" class="btn btn-ghost btn-sm" style="margin-left:auto">ออก</button>
+      </div>`;
+    }else{
+      sa.innerHTML=`<div style="padding:4px 0 12px">
+        <div style="font-size:13px;color:var(--g600);margin-bottom:10px">ยังไม่ได้ Login — ข้อมูลจะเก็บแค่ในเครื่องนี้ ไม่ sync กับอุปกรณ์อื่น</div>
+        <button class="btn btn-primary" onclick="signIn()" style="width:100%">🔐 เข้าสู่ระบบด้วย Google</button>
+      </div>`;
+    }
   }
+  const ssd=document.getElementById('sheet-sd');
+  const sst=document.getElementById('sheet-status-text');
+  if(ssd&&sst){
+    if(isIn&&cfg.sheetId){ssd.className='sd sd-on';sst.textContent='เชื่อมต่อแล้ว: '+cfg.sheetName+' · ข้อมูลเดียวกันทุกเครื่อง';}
+    else if(isIn){ssd.className='sd';ssd.style.background='var(--warning)';sst.textContent='Login แล้ว — กรุณาตั้งค่า Sheet ID';}
+    else{ssd.className='sd sd-off';sst.textContent='ยังไม่ได้ Login Google';}
+  }
+  // Upload area
+  const uw=document.getElementById('upload-auth-warn');
+  const uwrap=document.getElementById('upload-wrap');
+  if(uw&&uwrap){uw.style.display=isIn?'none':'flex';uwrap.style.display=isIn?'block':'none';}
+  // Drive card
+  if(isIn&&cfg.driveFolderId&&!document.getElementById('drive-card-area')?.querySelector('a')) renderDriveCard(null);
 }
 
-// ══════════════════════════════════════════════
-//  AUTO SYNC
-// ══════════════════════════════════════════════
-function setupAutoSync(){
-  if(syncTimer) clearInterval(syncTimer);
-  if(accessToken && cfg.sheetId && cfg.syncInterval>0)
-    syncTimer=setInterval(()=>syncToSheet(true),cfg.syncInterval*60000);
-}
-
-// ══════════════════════════════════════════════
+// ═══════════════════════════════
 //  NAVIGATION
-// ══════════════════════════════════════════════
-function navigate(page){
+// ═══════════════════════════════
+function goTo(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.querySelectorAll('.bn-item[data-page]').forEach(b=>b.classList.remove('active'));
-  const titles={dashboard:'📊 Dashboard',policies:'📋 กรมธรรม์',members:'👨‍👩‍👧‍👦 สมาชิก',settings:'⚙️ ตั้งค่า'};
-  document.getElementById('page-title').textContent=titles[page]||page;
-  document.querySelectorAll(`.bn-item[data-page="${page}"]`).forEach(b=>b.classList.add('active'));
+  document.querySelectorAll('.nav-item,.bn-item[data-p]').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll(`[data-p="${page}"]`).forEach(n=>n.classList.add('active'));
+  const T={dashboard:'📊 Dashboard',policies:'📋 กรมธรรม์',members:'👨‍👩‍👧‍👦 สมาชิก',settings:'⚙️ ตั้งค่า'};
+  document.getElementById('page-title').textContent=T[page]||page;
   if(page==='policies') renderPolicies();
   if(page==='members')  renderMembers();
   if(page==='dashboard'){renderDashboard();updateAuthUI();}
   if(page==='settings') updateAuthUI();
-  // Scroll to top
+  closeSidebar();
   window.scrollTo({top:0,behavior:'smooth'});
 }
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebar-overlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('open');}
 
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.add('open');
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
-
-// ══════════════════════════════════════════════
-//  DATE & FORMAT UTILS
-// ══════════════════════════════════════════════
-function daysLeft(d){
-  if(!d) return Infinity;
-  const now=new Date(); now.setHours(0,0,0,0);
-  return Math.ceil((new Date(d)-now)/86400000);
-}
-function thaiDate(s){
-  if(!s) return '-';
-  const d=new Date(s);
+// ═══════════════════════════════
+//  DATE UTILS
+// ═══════════════════════════════
+function dl(d){if(!d) return Infinity;const n=new Date();n.setHours(0,0,0,0);return Math.ceil((new Date(d)-n)/864e5);}
+function thd(s){
+  if(!s) return '-';const d=new Date(s);
   const M=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  return `${d.getDate()} ${M[d.getMonth()]} ${d.getFullYear()+543}`;
+  return`${d.getDate()} ${M[d.getMonth()]} ${d.getFullYear()+543}`;
 }
-function fmtMoney(n){return n?Number(n).toLocaleString('th-TH')+' ฿':'-';}
-function getStatus(p){const d=daysLeft(p.end_date);return d<0?'expired':d<=90?'expiring':'active';}
-function getMember(id){return members.find(m=>m.id===id)||{name:id||'?',color:'#9aa0a6'};}
-function getInitials(n){return(n||'?').split(' ').map(w=>w[0]).join('').substr(0,2).toUpperCase();}
-
-function populateMemberDropdowns(){
-  ['f-member'].forEach(id=>{
-    const sel=document.getElementById(id); if(!sel) return;
-    const prev=sel.value;
-    sel.innerHTML='<option value="">-- เลือกสมาชิก --</option>';
-    members.forEach(m=>{const o=document.createElement('option');o.value=m.id;o.textContent=m.name+(m.role?` (${m.role})`:'');sel.appendChild(o);});
-    sel.value=prev;
-  });
+function fm(n){return n?Number(n).toLocaleString('th-TH')+' ฿':'-';}
+function st(p){const d=dl(p.end_date);return d<0?'expired':d<=90?'expiring':'active';}
+function getMem(id){return members.find(m=>m.id===id)||{name:id||'?',color:'#9aa0a6'};}
+function ini(n){return(n||'?').split(' ').map(w=>w[0]).join('').substr(0,2).toUpperCase();}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
+function populateMemberSel(){
+  const sel=document.getElementById('f-member');if(!sel) return;
+  const prev=sel.value;
+  sel.innerHTML='<option value="">-- เลือกสมาชิก --</option>';
+  members.forEach(m=>{const o=document.createElement('option');o.value=m.id;o.textContent=m.name+(m.role?` (${m.role})`:'');sel.appendChild(o);});
+  if(prev) sel.value=prev;
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════
 //  RENDER ALL
-// ══════════════════════════════════════════════
-function renderAll(){renderDashboard();renderPolicies();renderMembers();updateExpiringBadge();}
+// ═══════════════════════════════
+function renderAll(){renderDashboard();renderPolicies();renderMembers();updateBadge();}
+function updateBadge(){
+  const n=policies.filter(p=>{const d=dl(p.end_date);return d>=0&&d<=90;}).length;
+  ['nb-side','nb-bn'].forEach(id=>{const b=document.getElementById(id);if(!b) return;b.style.display=n?'inline':'none';b.textContent=n;});
+}
 
-// ══════════════════════════════════════════════
-//  DASHBOARD
-// ══════════════════════════════════════════════
+// ── DASHBOARD
 function renderDashboard(){
   document.getElementById('s-total').textContent=policies.length;
-  document.getElementById('s-active').textContent=policies.filter(p=>getStatus(p)==='active').length;
-  document.getElementById('s-expiring').textContent=policies.filter(p=>getStatus(p)==='expiring').length;
-  const prem=policies.reduce((a,p)=>a+Number(p.premium||0),0);
-  document.getElementById('s-premium').textContent=prem?prem.toLocaleString('th-TH'):'-';
-  renderDonut(); renderBars(); renderExpiry();
+  document.getElementById('s-active').textContent=policies.filter(p=>st(p)==='active').length;
+  document.getElementById('s-expiring').textContent=policies.filter(p=>st(p)==='expiring').length;
+  const pr=policies.reduce((a,p)=>a+Number(p.premium||0),0);
+  document.getElementById('s-premium').textContent=pr?pr.toLocaleString('th-TH'):'-';
+  renderDonut();renderBars();renderExpiry();
 }
 function renderDonut(){
   const svg=document.getElementById('donut-svg');
-  const legend=document.getElementById('donut-legend');
   document.getElementById('donut-num').textContent=policies.length;
   svg.querySelectorAll('.ds').forEach(e=>e.remove());
-  if(!policies.length){legend.innerHTML='<span style="color:var(--g400);font-size:12px">ยังไม่มีข้อมูล</span>';return;}
-  const counts={};
-  policies.forEach(p=>{counts[p.type]=(counts[p.type]||0)+1;});
-  const total=policies.length,r=46,circ=2*Math.PI*r; let off=0;
-  Object.entries(counts).forEach(([t,n])=>{
-    const c=TYPE_CFG[t]||TYPE_CFG.other,pct=n/total,dash=pct*circ;
-    const ci=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    ci.setAttribute('class','ds');ci.setAttribute('cx',60);ci.setAttribute('cy',60);ci.setAttribute('r',r);
-    ci.setAttribute('fill','none');ci.setAttribute('stroke',c.color);ci.setAttribute('stroke-width',14);
-    ci.setAttribute('stroke-dasharray',`${dash} ${circ-dash}`);
-    ci.setAttribute('stroke-dashoffset',-(off*circ)); svg.appendChild(ci); off+=pct;
+  const lg=document.getElementById('donut-legend');
+  if(!policies.length){lg.innerHTML='<span style="color:var(--g400);font-size:12px">ยังไม่มีข้อมูล</span>';return;}
+  const cnt={};policies.forEach(p=>{cnt[p.type]=(cnt[p.type]||0)+1;});
+  const tot=policies.length,r=42,ci=2*Math.PI*r;let off=0;
+  Object.entries(cnt).forEach(([t,n])=>{
+    const c=TC[t]||TC.other,p=n/tot,d=p*ci;
+    const el=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    el.setAttribute('class','ds');el.setAttribute('cx',55);el.setAttribute('cy',55);el.setAttribute('r',r);
+    el.setAttribute('fill','none');el.setAttribute('stroke',c.color);el.setAttribute('stroke-width',13);
+    el.setAttribute('stroke-dasharray',`${d} ${ci-d}`);el.setAttribute('stroke-dashoffset',-(off*ci));
+    svg.appendChild(el);off+=p;
   });
-  legend.innerHTML=Object.entries(counts).map(([t,n])=>{
-    const c=TYPE_CFG[t]||TYPE_CFG.other;
+  lg.innerHTML=Object.entries(cnt).map(([t,n])=>{
+    const c=TC[t]||TC.other;
     return`<div class="legend-item"><div class="legend-dot" style="background:${c.color}"></div>${c.icon} ${c.label} (${n})</div>`;
   }).join('');
 }
 function renderBars(){
   const el=document.getElementById('member-bars');
-  if(!members.length){el.innerHTML='<div style="text-align:center;padding:16px;color:var(--g400);font-size:13px">ยังไม่มีสมาชิก</div>';return;}
+  if(!members.length){el.innerHTML='<div style="text-align:center;padding:14px;color:var(--g400);font-size:12px">ยังไม่มีสมาชิก</div>';return;}
   el.innerHTML=members.map(m=>{
     const mp=policies.filter(p=>p.member===m.id);
     const tc={};mp.forEach(p=>{tc[p.type]=(tc[p.type]||0)+1;});
-    const segs=Object.entries(tc).map(([t,c2])=>{
-      const c=TYPE_CFG[t]||TYPE_CFG.other;
-      return`<div class="bar-seg" style="width:${(c2/Math.max(mp.length,1))*100}%;background:${c.color}"></div>`;
-    }).join('');
+    const segs=Object.entries(tc).map(([t,c])=>{const cfg2=TC[t]||TC.other;return`<div class="bar-seg" style="width:${(c/Math.max(mp.length,1))*100}%;background:${cfg2.color}"></div>`;}).join('');
     return`<div class="member-bar-row">
-      <div style="display:flex;align-items:center;gap:6px;width:100px;flex-shrink:0">
-        <div style="width:26px;height:26px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0">${getInitials(m.name)}</div>
-        <span style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name.split(' ')[0]}</span>
+      <div style="display:flex;align-items:center;gap:6px;width:90px;flex-shrink:0">
+        <div style="width:24px;height:24px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0">${ini(m.name)}</div>
+        <span style="font-size:11px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name.split(' ')[0]}</span>
       </div>
-      <div class="bar-track">${mp.length?segs:'<div style="width:100%"></div>'}</div>
+      <div class="bar-track">${mp.length?segs:''}</div>
       <div class="bar-count">${mp.length}</div>
     </div>`;
   }).join('');
 }
 function renderExpiry(){
   const el=document.getElementById('expiry-list');
-  const exp=policies.filter(p=>{const d=daysLeft(p.end_date);return d>=0&&d<=90;})
-    .sort((a,b)=>daysLeft(a.end_date)-daysLeft(b.end_date)).slice(0,8);
-  if(!exp.length){el.innerHTML='<div style="text-align:center;padding:16px;color:var(--g400);font-size:13px">ไม่มีกรมธรรม์ที่ใกล้หมดอายุ 🎉</div>';return;}
-  el.innerHTML=exp.map(p=>{
-    const mem=getMember(p.member),c=TYPE_CFG[p.type]||TYPE_CFG.other,d=daysLeft(p.end_date);
-    const cls=d<=30?'days-critical':d<=60?'days-warning':'days-ok';
+  const ex=policies.filter(p=>{const d=dl(p.end_date);return d>=0&&d<=90;}).sort((a,b)=>dl(a.end_date)-dl(b.end_date)).slice(0,8);
+  if(!ex.length){el.innerHTML='<div style="text-align:center;padding:14px;color:var(--g400);font-size:12px">ไม่มีกรมธรรม์ที่ใกล้หมดอายุ 🎉</div>';return;}
+  el.innerHTML=ex.map(p=>{
+    const m=getMem(p.member),c=TC[p.type]||TC.other,d=dl(p.end_date);
+    const cls=d<=30?'days-crit':d<=60?'days-warn':'days-ok';
     return`<div class="expiry-item" onclick="showDetail('${p.id}')">
-      <div class="expiry-avatar" style="background:${mem.color}">${getInitials(mem.name)}</div>
-      <div class="expiry-info">
-        <div class="expiry-name">${mem.name} — ${p.company||'(ไม่ระบุ)'}</div>
-        <div class="expiry-type">${c.icon} ${c.label}${p.plan_name?' · '+p.plan_name:''}</div>
-      </div>
-      <div class="expiry-days ${cls}">${d}ว.<br><span style="font-size:9px;font-weight:400">${thaiDate(p.end_date)}</span></div>
+      <div class="expiry-avatar" style="background:${m.color}">${ini(m.name)}</div>
+      <div class="expiry-info"><div class="expiry-name">${m.name} — ${p.company||'?'}</div><div class="expiry-type">${c.icon} ${c.label}</div></div>
+      <div class="expiry-days ${cls}">${d}ว.<br><span style="font-size:9px;font-weight:400">${thd(p.end_date)}</span></div>
     </div>`;
   }).join('');
 }
 function checkAlerts(){
-  const area=document.getElementById('alert-area');
-  const crit=policies.filter(p=>{const d=daysLeft(p.end_date);return d>=0&&d<=30;});
-  const warn=policies.filter(p=>{const d=daysLeft(p.end_date);return d>30&&d<=60;});
-  let html='';
-  if(crit.length) html+=`<div class="alert alert-danger">🚨 <div><strong>ด่วน!</strong> มี ${crit.length} กรมธรรม์หมดอายุใน 30 วัน</div></div>`;
-  if(warn.length) html+=`<div class="alert alert-warning">⚠️ มี ${warn.length} กรมธรรม์หมดอายุใน 31–60 วัน</div>`;
-  area.innerHTML=html;
-}
-function updateExpiringBadge(){
-  const n=policies.filter(p=>{const d=daysLeft(p.end_date);return d>=0&&d<=90;}).length;
-  ['expiring-count-side','expiring-count-bn'].forEach(id=>{
-    const b=document.getElementById(id); if(!b) return;
-    b.style.display=n?'inline':'none'; b.textContent=n;
-  });
+  const ar=document.getElementById('alert-area');
+  const cr=policies.filter(p=>{const d=dl(p.end_date);return d>=0&&d<=30;});
+  const wa=policies.filter(p=>{const d=dl(p.end_date);return d>30&&d<=60;});
+  ar.innerHTML=(cr.length?`<div class="alert alert-danger">🚨 <div><strong>ด่วน!</strong> ${cr.length} กรมธรรม์หมดอายุใน 30 วัน</div></div>`:'')
+    +(wa.length?`<div class="alert alert-warning">⚠️ ${wa.length} กรมธรรม์หมดอายุใน 31–60 วัน</div>`:'');
 }
 
-// ══════════════════════════════════════════════
-//  POLICIES PAGE
-// ══════════════════════════════════════════════
-function setFilter(el,filter){
-  activeFilter=filter;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderPolicies();
-}
-function setTypeFilter(type){
-  activeFilter=type;
-  document.querySelectorAll('.filter-chip').forEach(c=>{
-    c.classList.toggle('active',c.dataset.filter===type);
-  });
-}
+// ── POLICIES PAGE
+function setFilter(el,f){activeFilter=f;document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderPolicies();}
+function setFilter2(type){activeFilter=type;document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active',c.dataset.f===type));renderPolicies();}
 function getFiltered(){
-  const q=(document.getElementById('search-input')?.value||'').toLowerCase();
+  const q=(document.getElementById('q')?.value||'').toLowerCase();
   return policies.filter(p=>{
-    const mem=getMember(p.member);
-    const str=[p.company,p.policy_no,p.plan_name,mem.name].join(' ').toLowerCase();
-    if(q && !str.includes(q)) return false;
+    const m=getMem(p.member);
+    if(q&&![p.company,p.policy_no,p.plan_name,m.name].join(' ').toLowerCase().includes(q)) return false;
     if(activeFilter==='all') return true;
-    if(activeFilter==='expiring') return getStatus(p)==='expiring';
-    if(activeFilter==='expired')  return getStatus(p)==='expired';
+    if(activeFilter==='expiring') return st(p)==='expiring';
+    if(activeFilter==='expired') return st(p)==='expired';
     return p.type===activeFilter;
   }).sort((a,b)=>new Date(a.end_date||0)-new Date(b.end_date||0));
 }
 function renderPolicies(){
-  const list=document.getElementById('policy-list');
-  const empty=document.getElementById('empty-state');
+  const list=document.getElementById('policy-list'),empty=document.getElementById('empty-state');
   const rows=getFiltered();
   if(!rows.length){list.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   list.innerHTML=rows.map(p=>{
-    const mem=getMember(p.member),c=TYPE_CFG[p.type]||TYPE_CFG.other;
-    const st=getStatus(p),d=daysLeft(p.end_date);
-    const stMap={active:['status-active','คุ้มครองอยู่'],expiring:['status-expiring','ใกล้หมดอายุ'],expired:['status-expired','หมดอายุ']};
-    const [dc,sl]=stMap[st];
+    const m=getMem(p.member),c=TC[p.type]||TC.other,s=st(p),d=dl(p.end_date);
+    const sm={active:['s-active','คุ้มครองอยู่'],expiring:['s-expiring','ใกล้หมดอายุ'],expired:['s-expired','หมดอายุ']};
+    const [dc,sl]=sm[s];
     const files=(p.driveFiles||[]);
-    const fileRow=files.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${files.map(f=>`<a class="file-chip" href="${f.webViewLink||'#'}" target="_blank">📎 ${f.name}</a>`).join('')}</div>`:'';
+    const fr=files.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${files.map(f=>`<a class="file-chip" href="${f.webViewLink||'#'}" target="_blank">📎 ${f.name}</a>`).join('')}</div>`:'';
     return`<div class="policy-card">
-      <div class="policy-card-top">
-        <div class="policy-card-avatar" style="background:${mem.color}">${getInitials(mem.name)}</div>
-        <div class="policy-card-info">
-          <div class="policy-card-name">${mem.name}</div>
-          <div class="policy-card-company">${p.company||'-'}${p.plan_name?' · '+p.plan_name:''}</div>
-        </div>
+      <div class="pc-top">
+        <div class="pc-avatar" style="background:${m.color}">${ini(m.name)}</div>
+        <div class="pc-info"><div class="pc-name">${m.name}</div><div class="pc-company">${p.company||'-'}${p.plan_name?' · '+p.plan_name:''}</div></div>
         <span class="badge badge-${p.type}">${c.icon} ${c.label}</span>
       </div>
-      <div class="policy-card-bottom">
-        <span class="status-dot ${dc}"></span><span style="font-size:12px;color:var(--g600)">${sl}</span>
-        <span class="policy-card-date">หมดอายุ: ${thaiDate(p.end_date)}${st==='expiring'?' <strong style="color:var(--warning)">('+d+'วัน)</strong>':''}</span>
-        ${p.premium?`<span class="policy-card-premium">${fmtMoney(p.premium)}/ปี</span>`:''}
+      <div class="pc-bottom">
+        <span class="status-dot ${dc}"></span><span>${sl}</span>
+        <span>หมด: ${thd(p.end_date)}${s==='expiring'?` <strong style="color:var(--warning)">(${d}ว.)</strong>`:''}</span>
+        ${p.premium?`<span style="color:var(--primary);font-weight:600">${fm(p.premium)}/ปี</span>`:''}
       </div>
-      ${fileRow}
+      ${fr}
       <div class="pc-actions">
-        <button class="btn btn-ghost btn-sm" onclick="showDetail('${p.id}')" style="flex:1">👁️ ดูรายละเอียด</button>
+        <button class="btn btn-ghost btn-sm" onclick="showDetail('${p.id}')" style="flex:1">👁️ รายละเอียด</button>
         <button class="btn btn-outline btn-sm" onclick="editPolicy('${p.id}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="deletePolicy('${p.id}')">🗑️</button>
       </div>
@@ -1505,342 +1267,259 @@ function renderPolicies(){
   }).join('');
 }
 
-// ══════════════════════════════════════════════
-//  ADD / EDIT POLICY
-// ══════════════════════════════════════════════
+// ── ADD / EDIT
 function openAddModal(){
-  editingId=null; pendingFiles=[];
+  editId=null;pendingFiles=[];
   document.getElementById('modal-title').textContent='➕ เพิ่มกรมธรรม์';
-  clearForm(); populateMemberDropdowns();
-  updateUploadArea();
-  openModal('policy-modal');
+  clearForm();populateMemberSel();updateUpload();openModal('policy-modal');
 }
 function clearForm(){
-  selectedType='';
-  document.querySelectorAll('.type-chip').forEach(c=>c.className='type-chip');
-  ['f-type','f-company','f-policy-no','f-plan','f-start','f-end','f-premium','f-sum','f-beneficiary','f-notes']
+  selType='';document.querySelectorAll('.type-chip').forEach(c=>c.className='type-chip');
+  ['f-type','f-company','f-polno','f-plan','f-start','f-end','f-premium','f-sum','f-bene','f-notes']
     .forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
   document.getElementById('f-member').value='';
   document.getElementById('f-freq').value='yearly';
-  document.querySelectorAll('#coverage-grid input').forEach(cb=>cb.checked=false);
-  pendingFiles=[]; renderFileList();
+  document.querySelectorAll('.cov-grid input').forEach(cb=>cb.checked=false);
+  pendingFiles=[];renderFileList();
 }
-function updateUploadArea(){
-  const ua=document.getElementById('upload-not-auth');
-  const uw=document.getElementById('upload-wrap');
-  if(ua&&uw){ua.style.display=accessToken?'none':'flex';uw.style.display=accessToken?'block':'none';}
+function updateUpload(){
+  const w=document.getElementById('upload-auth-warn'),u=document.getElementById('upload-wrap');
+  if(w&&u){w.style.display=token?'none':'flex';u.style.display=token?'block':'none';}
 }
-function selectType(type){
-  selectedType=type;
-  document.getElementById('f-type').value=type;
-  document.querySelectorAll('.type-chip').forEach(c=>{c.className='type-chip';if(c.dataset.type===type) c.className=`type-chip sel-${type}`;});
+function selType(type){
+  selType=type;document.getElementById('f-type').value=type;
+  document.querySelectorAll('.type-chip').forEach(c=>{c.className='type-chip';if(c.dataset.t===type) c.className=`type-chip tc-sel-${type}`;});
 }
-
 async function savePolicy(){
   const member=document.getElementById('f-member').value;
   const company=document.getElementById('f-company').value.trim();
   const start=document.getElementById('f-start').value;
   const end=document.getElementById('f-end').value;
-  const type=selectedType;
-  if(!member){showToast('กรุณาเลือกสมาชิก','error');return;}
-  if(!company){showToast('กรุณากรอกบริษัทประกัน','error');return;}
-  if(!type){showToast('กรุณาเลือกประเภทประกัน','error');return;}
-  if(!start||!end){showToast('กรุณากรอกวันคุ้มครอง','error');return;}
-  if(new Date(end)<=new Date(start)){showToast('วันหมดอายุต้องหลังวันเริ่ม','error');return;}
+  const type=selType;
+  if(!member){toast('กรุณาเลือกสมาชิก','error');return;}
+  if(!company){toast('กรุณากรอกบริษัท','error');return;}
+  if(!type){toast('กรุณาเลือกประเภทประกัน','error');return;}
+  if(!start||!end){toast('กรุณากรอกวันคุ้มครอง','error');return;}
+  if(new Date(end)<=new Date(start)){toast('วันหมดต้องหลังวันเริ่ม','error');return;}
 
   const btn=document.getElementById('save-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> กำลังบันทึก...';
+  btn.disabled=true;btn.innerHTML='<div class="spin"></div> กำลังบันทึก...';
 
-  // Upload files
-  let driveFiles=editingId?(policies.find(p=>p.id===editingId)?.driveFiles||[]):[];
-  if(accessToken && pendingFiles.length && cfg.driveFolderId){
-    showSyncLoader(true);
+  let driveFiles=editId?(policies.find(p=>p.id===editId)?.driveFiles||[]):[];
+  if(token&&pendingFiles.length&&cfg.driveFolderId){
     try{
-      const folderId=await getOrCreateMemberFolder(member);
+      const fid=await getOrCreateMemberFolder(member);
       for(let i=0;i<pendingFiles.length;i++){
-        if(pendingFiles[i].status==='pending'){
-          const r=await uploadFileToDrive(pendingFiles[i].file,folderId,i);
-          if(r) driveFiles.push(r);
-        }
+        if(pendingFiles[i].status==='pending'){const r=await uploadFile(pendingFiles[i].file,fid,i);if(r) driveFiles.push(r);}
       }
-    }catch(e){showToast('อัพโหลดบางไฟล์ไม่สำเร็จ','warn');}
-    showSyncLoader(false);
+    }catch(e){toast('อัพโหลดบางไฟล์ไม่สำเร็จ','warn');}
   }
 
-  const cov=[...document.querySelectorAll('#coverage-grid input:checked')].map(cb=>cb.value);
+  const cov=[...document.querySelectorAll('.cov-grid input:checked')].map(cb=>cb.value);
   const policy={
-    id:editingId||uid(),member,type,company,
-    policy_no:document.getElementById('f-policy-no').value.trim(),
+    id:editId||uid(),member,type,company,
+    policy_no:document.getElementById('f-polno').value.trim(),
     plan_name:document.getElementById('f-plan').value.trim(),
     start_date:start,end_date:end,
     premium:document.getElementById('f-premium').value||0,
     sum_insured:document.getElementById('f-sum').value||0,
     payment_freq:document.getElementById('f-freq').value,
-    beneficiary:document.getElementById('f-beneficiary').value.trim(),
+    beneficiary:document.getElementById('f-bene').value.trim(),
     coverage:cov,driveFiles,
     notes:document.getElementById('f-notes').value.trim(),
-    created_at:editingId?(policies.find(p=>p.id===editingId)?.created_at||new Date().toISOString()):new Date().toISOString(),
+    created_at:editId?(policies.find(p=>p.id===editId)?.created_at||new Date().toISOString()):new Date().toISOString(),
     updated_at:new Date().toISOString(),
   };
-
-  if(editingId){const i=policies.findIndex(p=>p.id===editingId);if(i!==-1)policies[i]=policy;}
+  if(editId){const i=policies.findIndex(p=>p.id===editId);if(i!==-1) policies[i]=policy;}
   else policies.push(policy);
-
-  saveLocal(); closeModal('policy-modal');
-  renderAll(); checkAlerts();
-  btn.disabled=false; btn.innerHTML='💾 บันทึกกรมธรรม์';
-  showToast(editingId?'อัพเดทเรียบร้อย ✅':'บันทึกเรียบร้อย ✅','success');
-
-  if(accessToken && cfg.sheetId) syncToSheet(true);
+  saveLocalFallback();
+  closeModal('policy-modal');renderAll();checkAlerts();
+  btn.disabled=false;btn.innerHTML='💾 บันทึก';
+  toast(editId?'อัพเดทเรียบร้อย ✅':'บันทึกเรียบร้อย ✅','success');
+  if(token&&cfg.sheetId) pushToSheet(true); // push ขึ้น Sheet อัตโนมัติ
 }
-
 function editPolicy(id){
-  const p=policies.find(p=>p.id===id); if(!p) return;
-  editingId=id; pendingFiles=[];
+  const p=policies.find(p=>p.id===id);if(!p) return;
+  editId=id;pendingFiles=[];
   document.getElementById('modal-title').textContent='✏️ แก้ไขกรมธรรม์';
-  clearForm(); populateMemberDropdowns();
-  selectType(p.type);
+  clearForm();populateMemberSel();selType(p.type);
   document.getElementById('f-member').value=p.member;
-  ['f-company','f-policy-no','f-plan','f-start','f-end','f-premium','f-sum','f-beneficiary','f-notes']
-    .forEach(id=>{const k=id.replace('f-','').replace('-','_').replace('policy_no','policy_no').replace('f_','');});
   document.getElementById('f-company').value=p.company||'';
-  document.getElementById('f-policy-no').value=p.policy_no||'';
+  document.getElementById('f-polno').value=p.policy_no||'';
   document.getElementById('f-plan').value=p.plan_name||'';
   document.getElementById('f-start').value=p.start_date||'';
   document.getElementById('f-end').value=p.end_date||'';
   document.getElementById('f-premium').value=p.premium||'';
   document.getElementById('f-sum').value=p.sum_insured||'';
   document.getElementById('f-freq').value=p.payment_freq||'yearly';
-  document.getElementById('f-beneficiary').value=p.beneficiary||'';
+  document.getElementById('f-bene').value=p.beneficiary||'';
   document.getElementById('f-notes').value=p.notes||'';
-  if(p.coverage) p.coverage.forEach(v=>{const cb=document.querySelector(`#coverage-grid input[value="${v}"]`);if(cb) cb.checked=true;});
-  updateUploadArea();
-  closeModal('detail-modal');
-  openModal('policy-modal');
+  if(p.coverage) p.coverage.forEach(v=>{const cb=document.querySelector(`.cov-grid input[value="${v}"]`);if(cb) cb.checked=true;});
+  updateUpload();closeModal('detail-modal');openModal('policy-modal');
 }
-
 function deletePolicy(id){
   if(!confirm('ต้องการลบกรมธรรม์นี้?')) return;
   policies=policies.filter(p=>p.id!==id);
-  saveLocal(); renderAll(); checkAlerts(); closeModal('detail-modal');
-  showToast('ลบเรียบร้อย','warn');
-  if(accessToken && cfg.sheetId) syncToSheet(true);
+  saveLocalFallback();renderAll();checkAlerts();closeModal('detail-modal');
+  toast('ลบเรียบร้อย','warn');
+  if(token&&cfg.sheetId) pushToSheet(true);
 }
-
 function showDetail(id){
-  const p=policies.find(p=>p.id===id); if(!p) return;
-  const mem=getMember(p.member),c=TYPE_CFG[p.type]||TYPE_CFG.other;
-  const st=getStatus(p),d=daysLeft(p.end_date);
-  const stTxt={active:'✅ คุ้มครองอยู่',expiring:'⚠️ ใกล้หมดอายุ',expired:'❌ หมดอายุ'};
-  const freqTxt={yearly:'รายปี',halfyearly:'ราย 6 เดือน',quarterly:'รายไตรมาส',monthly:'รายเดือน'};
-  const covTags=(p.coverage||[]).map(cv=>`<div class="coverage-tag">${COV_LBL[cv]||cv}</div>`).join('');
-  const filesHTML=(p.driveFiles||[]).map(f=>`<div class="attached-file">
-    <span style="font-size:20px">${f.name?.endsWith('.pdf')?'📄':'🖼️'}</span>
-    <div class="attached-file-info"><div class="attached-file-name">${f.name}</div><div class="attached-file-meta">Google Drive</div></div>
+  const p=policies.find(p=>p.id===id);if(!p) return;
+  const m=getMem(p.member),c=TC[p.type]||TC.other,s=st(p),d=dl(p.end_date);
+  const stxt={active:'✅ คุ้มครองอยู่',expiring:'⚠️ ใกล้หมดอายุ',expired:'❌ หมดอายุ'};
+  const ftxt={yearly:'รายปี',halfyearly:'ราย 6 เดือน',quarterly:'รายไตรมาส',monthly:'รายเดือน'};
+  const ct=(p.coverage||[]).map(cv=>`<div class="cov-tag">${CL[cv]||cv}</div>`).join('');
+  const fh=(p.driveFiles||[]).map(f=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--white);border:1px solid var(--g200);border-radius:8px;margin-bottom:6px">
+    <span style="font-size:18px">${f.name?.endsWith('.pdf')?'📄':'🖼️'}</span>
+    <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.name}</div><div style="font-size:11px;color:var(--g500)">Google Drive</div></div>
     <a href="${f.webViewLink||'#'}" target="_blank" class="btn btn-outline btn-xs">เปิด</a>
   </div>`).join('');
-
-  document.getElementById('detail-content').innerHTML=`
+  document.getElementById('detail-body').innerHTML=`
   <div class="detail-hero">
-    <div class="detail-avatar" style="background:${mem.color}">${getInitials(mem.name)}</div>
-    <div>
-      <div style="font-size:15px;font-weight:700">${mem.name}</div>
-      <div style="margin-top:4px"><span class="badge badge-${p.type}">${c.icon} ${c.label}</span> <span style="font-size:12px;color:var(--g500)">${p.company||''}</span></div>
-    </div>
+    <div class="detail-avatar" style="background:${m.color}">${ini(m.name)}</div>
+    <div><div style="font-size:15px;font-weight:700">${m.name}</div>
+    <div style="margin-top:4px"><span class="badge badge-${p.type}">${c.icon} ${c.label}</span> <span style="font-size:12px;color:var(--g500)">${p.company||''}</span></div></div>
   </div>
   <div class="detail-rows">
-    <div class="detail-2col">
-      <div class="detail-row"><div class="detail-key">เลขกรมธรรม์</div><div class="detail-val" style="font-family:monospace;font-size:13px">${p.policy_no||'-'}</div></div>
-      <div class="detail-row"><div class="detail-key">สถานะ</div><div class="detail-val" style="font-size:13px">${stTxt[st]}${st==='expiring'?' ('+d+'วัน)':''}</div></div>
+    <div class="detail-2">
+      <div class="detail-row"><div class="detail-k">เลขกรมธรรม์</div><div class="detail-v" style="font-family:monospace;font-size:12px">${p.policy_no||'-'}</div></div>
+      <div class="detail-row"><div class="detail-k">สถานะ</div><div class="detail-v" style="font-size:12px">${stxt[s]}${s==='expiring'?` (${d}ว.)`:''}</div></div>
     </div>
-    <div class="detail-2col">
-      <div class="detail-row"><div class="detail-key">วันเริ่มคุ้มครอง</div><div class="detail-val">${thaiDate(p.start_date)}</div></div>
-      <div class="detail-row"><div class="detail-key">วันหมดอายุ</div><div class="detail-val">${thaiDate(p.end_date)}</div></div>
+    <div class="detail-2">
+      <div class="detail-row"><div class="detail-k">วันเริ่ม</div><div class="detail-v">${thd(p.start_date)}</div></div>
+      <div class="detail-row"><div class="detail-k">วันหมดอายุ</div><div class="detail-v">${thd(p.end_date)}</div></div>
     </div>
-    <div class="detail-2col">
-      <div class="detail-row"><div class="detail-key">เบี้ยประกัน/ปี</div><div class="detail-val">${fmtMoney(p.premium)}</div></div>
-      <div class="detail-row"><div class="detail-key">ทุนประกัน</div><div class="detail-val">${fmtMoney(p.sum_insured)}</div></div>
+    <div class="detail-2">
+      <div class="detail-row"><div class="detail-k">เบี้ยประกัน/ปี</div><div class="detail-v">${fm(p.premium)}</div></div>
+      <div class="detail-row"><div class="detail-k">ทุนประกัน</div><div class="detail-v">${fm(p.sum_insured)}</div></div>
     </div>
-    <div class="detail-2col">
-      <div class="detail-row"><div class="detail-key">ความถี่ชำระ</div><div class="detail-val">${freqTxt[p.payment_freq]||'-'}</div></div>
-      <div class="detail-row"><div class="detail-key">ผู้รับผลประโยชน์</div><div class="detail-val">${p.beneficiary||'-'}</div></div>
+    <div class="detail-2">
+      <div class="detail-row"><div class="detail-k">ความถี่ชำระ</div><div class="detail-v">${ftxt[p.payment_freq]||'-'}</div></div>
+      <div class="detail-row"><div class="detail-k">ผู้รับผลประโยชน์</div><div class="detail-v">${p.beneficiary||'-'}</div></div>
     </div>
-    ${p.plan_name?`<div class="detail-row"><div class="detail-key">ชื่อแผน</div><div class="detail-val">${p.plan_name}</div></div>`:''}
-    ${covTags?`<div style="padding:10px 12px;background:var(--g50);border-radius:8px"><div class="detail-key" style="margin-bottom:6px">ความคุ้มครอง</div><div class="coverage-tags">${covTags}</div></div>`:''}
-    ${filesHTML?`<div><div class="detail-key" style="margin-bottom:6px;padding:0 2px">📎 ไฟล์แนบ</div>${filesHTML}</div>`:''}
-    ${p.notes?`<div class="detail-row"><div class="detail-key">หมายเหตุ</div><div class="detail-val" style="font-size:13px;font-weight:400">${p.notes}</div></div>`:''}
+    ${ct?`<div style="padding:10px 12px;background:var(--g50);border-radius:8px"><div class="detail-k" style="margin-bottom:6px">ความคุ้มครอง</div><div class="cov-tags">${ct}</div></div>`:''}
+    ${fh?`<div><div class="detail-k" style="margin-bottom:6px;padding:0 2px">📎 ไฟล์แนบ</div>${fh}</div>`:''}
+    ${p.notes?`<div class="detail-row"><div class="detail-k">หมายเหตุ</div><div class="detail-v" style="font-size:12px;font-weight:400">${p.notes}</div></div>`:''}
   </div>`;
-  document.getElementById('detail-edit-btn').onclick=()=>editPolicy(id);
-  document.getElementById('detail-del-btn').onclick=()=>deletePolicy(id);
+  document.getElementById('det-edit').onclick=()=>editPolicy(id);
+  document.getElementById('det-del').onclick=()=>deletePolicy(id);
   openModal('detail-modal');
 }
 
-// ══════════════════════════════════════════════
-//  FILE HANDLING
-// ══════════════════════════════════════════════
-function handleFileSelect(e){addFiles([...e.target.files]);e.target.value='';}
-function handleDrop(e){e.preventDefault();addFiles([...e.dataTransfer.files]);}
+// ── MEMBERS
+function openMemberModal(){
+  document.getElementById('m-name').value='';
+  document.getElementById('m-role').value='ตัวเอง';
+  document.getElementById('m-dob').value='';
+  document.getElementById('m-color').value=PAL[members.length%PAL.length];
+  openModal('member-modal');
+}
+function saveMember(){
+  const name=document.getElementById('m-name').value.trim();
+  if(!name){toast('กรุณากรอกชื่อ','error');return;}
+  members.push({id:uid(),name,role:document.getElementById('m-role').value,dob:document.getElementById('m-dob').value,color:document.getElementById('m-color').value});
+  saveLocalFallback();populateMemberSel();renderMembers();renderDashboard();
+  closeModal('member-modal');toast(`เพิ่ม "${name}" เรียบร้อย`,'success');
+  if(token&&cfg.sheetId) pushToSheet(true);
+}
+function deleteMember(id){
+  if(!confirm('ลบสมาชิกนี้?')) return;
+  members=members.filter(m=>m.id!==id);
+  saveLocalFallback();populateMemberSel();renderMembers();renderDashboard();
+  toast('ลบเรียบร้อย','warn');
+  if(token&&cfg.sheetId) pushToSheet(true);
+}
+function renderMembers(){
+  const el=document.getElementById('member-list');if(!el) return;
+  if(!members.length){el.innerHTML='<div class="empty"><div class="empty-icon">👨‍👩‍👧‍👦</div><div class="empty-title">ยังไม่มีสมาชิก</div></div>';return;}
+  el.innerHTML=members.map(m=>{
+    const mp=policies.filter(p=>p.member===m.id);
+    const age=m.dob?Math.floor((Date.now()-new Date(m.dob))/315576e5):null;
+    const tb=[...new Set(mp.map(p=>p.type))].map(t=>{const c=TC[t]||TC.other;return`<div class="mini-badge" style="background:${c.bg};color:${c.color}">${c.icon} ${c.label}</div>`;}).join('');
+    const dl2=m.driveFolderId?`<a href="https://drive.google.com/drive/folders/${m.driveFolderId}" target="_blank" class="btn btn-ghost btn-xs">📁</a>`:'';
+    return`<div class="member-item">
+      <div class="m-avatar" style="background:${m.color}">${ini(m.name)}</div>
+      <div class="m-info">
+        <div class="m-name">${m.name}</div>
+        <div class="m-meta">${m.role||''}${age?' · '+age+' ปี':''} · ${mp.length} กรมธรรม์</div>
+        <div class="m-tags">${tb||'<span style="font-size:11px;color:var(--g400)">ยังไม่มีกรมธรรม์</span>'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">${dl2}<button class="btn btn-danger btn-xs" onclick="deleteMember('${m.id}')">🗑️</button></div>
+    </div>`;
+  }).join('');
+}
+
+// ── SETTINGS
+function saveClientId(){
+  const id=document.getElementById('client-id-input').value.trim();
+  if(!id){toast('กรุณากรอก Client ID','error');return;}
+  cfg.clientId=id;saveCfg();toast('บันทึกแล้ว — กำลัง Refresh...','success');
+  setTimeout(()=>location.reload(),1500);
+}
+function saveSheetConfig(){
+  cfg.sheetId=document.getElementById('sheet-id').value.trim();
+  cfg.sheetName=document.getElementById('sheet-name').value.trim()||'Policies';
+  cfg.membersSheetName=document.getElementById('members-sheet-name').value.trim()||'Members';
+  cfg.syncInterval=parseInt(document.getElementById('sync-interval')?.value)||15;
+  saveCfg();updateSyncBar();updateAuthUI();
+  toast('บันทึกการตั้งค่า Sheet เรียบร้อย','success');
+  if(token&&cfg.sheetId) pullFromSheet();
+}
+function exportCSV(){
+  const H=['สมาชิก','ประเภท','บริษัท','เลขกรมธรรม์','ชื่อแผน','วันเริ่ม','วันหมด','เบี้ย','ทุน','ความคุ้มครอง','ผู้รับ','หมายเหตุ'];
+  const rows=policies.map(p=>[getMem(p.member).name,(TC[p.type]||TC.other).label,p.company,p.policy_no,p.plan_name,p.start_date,p.end_date,p.premium,p.sum_insured,(p.coverage||[]).map(c=>CL[c]||c).join('; '),p.beneficiary,p.notes]);
+  const csv=[H,...rows].map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download=`insurance_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('Export CSV เรียบร้อย','success');
+}
+function clearAllData(){
+  if(!confirm('ลบข้อมูลทั้งหมดในเครื่องนี้?'))return;
+  policies=[];members=[{id:uid(),name:'ฉัน (ตัวเอง)',role:'ตัวเอง',color:'#1a73e8',dob:''}];
+  saveLocalFallback();populateMemberSel();renderAll();toast('ล้างข้อมูลในเครื่องเรียบร้อย','warn');
+}
+
+// ── FILES
+function onFilePick(e){addFiles([...e.target.files]);e.target.value='';}
+function onDrop(e){e.preventDefault();addFiles([...e.dataTransfer.files]);}
 function addFiles(files){
-  files.forEach(f=>{
-    if(f.size>20*1024*1024){showToast(`"${f.name}" ใหญ่เกิน 20MB`,'error');return;}
-    if(!pendingFiles.find(x=>x.file.name===f.name&&x.file.size===f.size))
-      pendingFiles.push({file:f,status:'pending'});
-  });
+  files.forEach(f=>{if(f.size>20*1024*1024){toast(`"${f.name}" ใหญ่เกิน 20MB`,'error');return;}
+    if(!pendingFiles.find(x=>x.file.name===f.name&&x.file.size===f.size)) pendingFiles.push({file:f,status:'pending'});});
   renderFileList();
 }
 function removeFile(i){pendingFiles.splice(i,1);renderFileList();}
 function renderFileList(){
   const el=document.getElementById('file-list');if(!el) return;
   el.innerHTML=pendingFiles.map((pf,i)=>{
-    const icon=pf.file.name.endsWith('.pdf')?'📄':'🖼️';
+    const ic=pf.file.name.endsWith('.pdf')?'📄':'🖼️';
     const sz=(pf.file.size/1024).toFixed(0)+' KB';
-    const stIcon=pf.status==='done'?'✅':pf.status==='uploading'?'⏳':pf.status==='error'?'❌':'📌';
-    return`<div class="file-item">
-      <span style="font-size:18px">${icon}</span>
-      <div class="file-item-name">${pf.file.name}</div>
-      <div class="file-item-size">${sz}</div>
-      <span>${stIcon}</span>
-      ${pf.status==='pending'?`<button onclick="removeFile(${i})" style="background:none;border:none;cursor:pointer;color:var(--g400);font-size:16px;padding:4px;min-height:auto">✕</button>`:''}
-    </div>`;
+    const st2=pf.status==='done'?'✅':pf.status==='uploading'?'⏳':pf.status==='error'?'❌':'📌';
+    return`<div class="file-item"><span style="font-size:16px">${ic}</span><div class="file-item-name">${pf.file.name}</div><span style="font-size:11px;color:var(--g500);flex-shrink:0">${sz}</span><span>${st2}</span>${pf.status==='pending'?`<button onclick="removeFile(${i})" style="background:none;border:none;cursor:pointer;color:var(--g400);font-size:16px;padding:2px;min-height:auto">✕</button>`:''}</div>`;
   }).join('');
 }
 
-// ══════════════════════════════════════════════
-//  MEMBERS
-// ══════════════════════════════════════════════
-function openMemberModal(){
-  document.getElementById('m-name').value='';
-  document.getElementById('m-role').value='ตัวเอง';
-  document.getElementById('m-dob').value='';
-  document.getElementById('m-color').value=PALETTE[members.length%PALETTE.length];
-  openModal('member-modal');
-}
-function saveMember(){
-  const name=document.getElementById('m-name').value.trim();
-  if(!name){showToast('กรุณากรอกชื่อ','error');return;}
-  members.push({id:uid(),name,role:document.getElementById('m-role').value,
-    dob:document.getElementById('m-dob').value,color:document.getElementById('m-color').value});
-  saveLocal();populateMemberDropdowns();renderMembers();renderDashboard();
-  closeModal('member-modal');showToast(`เพิ่ม "${name}" เรียบร้อย`,'success');
-}
-function deleteMember(id){
-  if(!confirm('ลบสมาชิกนี้?')) return;
-  members=members.filter(m=>m.id!==id);
-  saveLocal();populateMemberDropdowns();renderMembers();renderDashboard();
-  showToast('ลบสมาชิกเรียบร้อย','warn');
-}
-function renderMembers(){
-  const el=document.getElementById('members-list');if(!el) return;
-  if(!members.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">👨‍👩‍👧‍👦</div><div class="empty-title">ยังไม่มีสมาชิก</div></div>';return;}
-  el.innerHTML=members.map(m=>{
-    const mp=policies.filter(p=>p.member===m.id);
-    const age=m.dob?Math.floor((Date.now()-new Date(m.dob))/31557600000):null;
-    const tBadges=[...new Set(mp.map(p=>p.type))].map(t=>{const c=TYPE_CFG[t]||TYPE_CFG.other;return`<div class="mini-badge" style="background:${c.bg};color:${c.color}">${c.icon} ${c.label}</div>`;}).join('');
-    const driveLink=m.driveFolderId?`<a href="https://drive.google.com/drive/folders/${m.driveFolderId}" target="_blank" class="btn btn-ghost btn-xs">📁 Drive</a>`:'';
-    return`<div class="member-item">
-      <div class="member-avatar" style="background:${m.color}">${getInitials(m.name)}</div>
-      <div class="member-info">
-        <div class="member-name">${m.name}</div>
-        <div class="member-meta">${m.role||''}${age?' · '+age+' ปี':''} · ${mp.length} กรมธรรม์</div>
-        <div class="member-tags" style="margin-top:6px">${tBadges||'<span style="font-size:11px;color:var(--g400)">ยังไม่มีกรมธรรม์</span>'}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-        ${driveLink}
-        <button class="btn btn-danger btn-xs" onclick="deleteMember('${m.id}')">🗑️</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ══════════════════════════════════════════════
-//  SETTINGS
-// ══════════════════════════════════════════════
-function saveClientId(){
-  const id=document.getElementById('client-id-input').value.trim();
-  if(!id){showToast('กรุณากรอก Client ID','error');return;}
-  cfg.clientId=id;saveLocal();
-  showToast('บันทึกแล้ว — กำลัง Refresh...','success');
-  setTimeout(()=>location.reload(),1500);
-}
-function saveSheetConfig(){
-  cfg.sheetId=document.getElementById('sheet-id').value.trim();
-  cfg.sheetName=document.getElementById('sheet-name').value.trim()||'Policies';
-  cfg.syncInterval=parseInt(document.getElementById('sync-interval').value)||0;
-  saveLocal();setupAutoSync();updateAuthUI();
-  showToast('บันทึกการตั้งค่า Sheet เรียบร้อย','success');
-}
-function exportCSV(){
-  const H=['สมาชิก','ประเภท','บริษัท','เลขกรมธรรม์','ชื่อแผน','วันเริ่ม','วันหมด','เบี้ย','ทุน','ความคุ้มครอง','ผู้รับผลประโยชน์','หมายเหตุ'];
-  const rows=policies.map(p=>[
-    getMember(p.member).name,(TYPE_CFG[p.type]||TYPE_CFG.other).label,
-    p.company,p.policy_no,p.plan_name,p.start_date,p.end_date,p.premium,p.sum_insured,
-    (p.coverage||[]).map(c=>COV_LBL[c]||c).join('; '),p.beneficiary,p.notes,
-  ]);
-  const csv=[H,...rows].map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
-  a.download=`family_insurance_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();showToast('Export CSV เรียบร้อย','success');
-}
-function clearAllData(){
-  if(!confirm('ลบข้อมูลทั้งหมด?'))return;
-  if(!confirm('ยืนยัน — ลบทั้งหมด?'))return;
-  policies=[];members=[{id:uid(),name:'ฉัน (ตัวเอง)',role:'ตัวเอง',color:'#1a73e8',dob:''}];
-  saveLocal();populateMemberDropdowns();renderAll();showToast('ล้างข้อมูลเรียบร้อย','warn');
-}
-
-// ══════════════════════════════════════════════
-//  UI HELPERS
-// ══════════════════════════════════════════════
-function showSyncLoader(show){
-  document.getElementById('sync-indicator').style.display=show?'flex':'none';
-}
+// ── MODAL
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.querySelectorAll('.modal-overlay').forEach(o=>{
-  o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');});
-});
-// Swipe down to close modal on mobile
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');}));
 document.querySelectorAll('.modal').forEach(modal=>{
-  let startY=0;
-  modal.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
-  modal.addEventListener('touchend',e=>{
-    const diff=e.changedTouches[0].clientY-startY;
-    if(diff>80 && modal.scrollTop===0) modal.closest('.modal-overlay').classList.remove('open');
-  },{passive:true});
+  let sy=0;
+  modal.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
+  modal.addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>80&&modal.scrollTop===0) modal.closest('.modal-overlay').classList.remove('open');},{passive:true});
 });
 
-function showToast(msg,type=''){
-  const c=document.getElementById('toast-container');
+// ── TOAST
+function toast(msg,type=''){
+  const c=document.getElementById('toast-wrap');
   const t=document.createElement('div');
-  t.className='toast'+(type?' toast-'+type:'');
+  t.className='toast'+(type?' t-'+type:'');
   t.innerHTML=(type==='success'?'✅ ':type==='error'?'❌ ':type==='warn'?'⚠️ ':'ℹ️ ')+msg;
   c.appendChild(t);
-  setTimeout(()=>{t.style.cssText='opacity:0;transform:translateY(10px);transition:all .3s';setTimeout(()=>t.remove(),300);},3000);
+  setTimeout(()=>{t.style.cssText='opacity:0;transform:translateY(6px);transition:all .3s';setTimeout(()=>t.remove(),300);},3000);
 }
 
-// ══════════════════════════════════════════════
-//  START
-// ══════════════════════════════════════════════
-init();
-setTimeout(()=>{if(!policies.length) loadDemo();},400);
-
-function loadDemo(){
-  const me=members[0];
-  const sp={id:uid(),name:'สมหญิง รักครอบครัว',role:'คู่สมรส',color:'#e91e63',dob:'1990-05-15'};
-  const ch={id:uid(),name:'น้องน้ำตาล',role:'ลูก',color:'#ff9800',dob:'2015-09-20'};
-  members.push(sp,ch);
-  const add=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);};
-  policies=[
-    {id:uid(),member:me.id,type:'health',company:'เมืองไทยประกันชีวิต',policy_no:'MTL-2024-001',plan_name:'Health Plus Gold',start_date:add(-180),end_date:add(185),premium:25000,sum_insured:3000000,coverage:['ipd','opd','dental'],beneficiary:'ภรรยา',driveFiles:[],notes:'',created_at:new Date().toISOString(),updated_at:new Date().toISOString()},
-    {id:uid(),member:me.id,type:'life',company:'AIA',policy_no:'AIA-LIFE-2022',plan_name:'Life Protect 20/20',start_date:add(-730),end_date:add(2555),premium:48000,sum_insured:5000000,coverage:['death','disability','saving'],beneficiary:'ภรรยาและลูก',driveFiles:[],notes:'',created_at:new Date().toISOString(),updated_at:new Date().toISOString()},
-    {id:uid(),member:me.id,type:'accident',company:'Allianz Ayudhya',policy_no:'AA-ACC-2024',plan_name:'PA Master',start_date:add(-60),end_date:add(25),premium:3500,sum_insured:500000,coverage:['accident_med','death'],beneficiary:'ภรรยา',driveFiles:[],notes:'',created_at:new Date().toISOString(),updated_at:new Date().toISOString()},
-    {id:uid(),member:sp.id,type:'health',company:'Cigna',policy_no:'CIGNA-2024',plan_name:'Smart Health',start_date:add(-90),end_date:add(55),premium:20000,sum_insured:2000000,coverage:['ipd','opd','maternity'],beneficiary:'สามี',driveFiles:[],notes:'',created_at:new Date().toISOString(),updated_at:new Date().toISOString()},
-    {id:uid(),member:ch.id,type:'health',company:'เมืองไทยประกันชีวิต',policy_no:'MTL-CHILD-001',plan_name:'Child Health Star',start_date:add(-30),end_date:add(335),premium:12000,sum_insured:1000000,coverage:['ipd','opd'],beneficiary:'พ่อแม่',driveFiles:[],notes:'',created_at:new Date().toISOString(),updated_at:new Date().toISOString()},
-  ];
-  saveLocal();populateMemberDropdowns();renderAll();checkAlerts();
-  showToast('โหลดข้อมูลตัวอย่าง 🎉','success');
-}
+// ── START
+boot();
 </script>
 </body>
 </html>
